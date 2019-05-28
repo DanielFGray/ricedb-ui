@@ -6,22 +6,17 @@ import Display from './Display'
 
 const has = (k, o) => Object.prototype.hasOwnProperty.call(o, k)
 
-const Main = ({ data }) => {
-  const [user, userChange] = useState(null)
-  const [category, categoryChange] = useState('all')
-
-  const selectUser = user => () => {
-    userChange(user)
-  }
-
-  const selectCategory = category => () => {
-    categoryChange(category)
-  }
+const Main = ({ data, refetch, loading }) => {
+  const [user, selectUser] = useState(null)
+  const [category, selectCategory] = useState('all')
 
   const userList = category !== 'all'
     ? Object.entries(data)
-        .filter(([, value]) => has(category, value))
-        .reduce((p, [k, v]) => Object.assign(p, { [k]: v }), {})
+      .reduce((p, [k, v]) => (
+        has(category, v)
+          ? Object.assign(p, { [k]: v })
+          : p
+      ), {})
     : data
   return (
     <div className="wrapper">
@@ -29,6 +24,8 @@ const Main = ({ data }) => {
         data={data}
         activeCategory={category}
         selectCategory={selectCategory}
+        refetch={refetch}
+        loading={loading}
       />
       <div class="displayarea">
         {user &&
@@ -38,7 +35,7 @@ const Main = ({ data }) => {
             ...data[user],
           })}
       </div>
-      <UserList data={userList} selectUser={selectUser} />
+      <UserList data={userList} selectUser={selectUser} activeUser={user} />
     </div>
   )
 }

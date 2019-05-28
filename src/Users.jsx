@@ -5,7 +5,7 @@ import Iconify from './Iconify'
 const withoutTimes = ({ last_seen, deadsince, ...x }) => x
 
 const User = ({ name, data, selectUser }) => (
-  <List.Item key={name} onClick={selectUser(name)}>
+  <List.Item key={name} onClick={() => selectUser(name)}>
     {name}
     <List.Content floated="right">
       <LabelGroup>
@@ -24,7 +24,7 @@ const UserList = ({ data, selectUser }) => {
   const list = input === '' ? Object.keys(data)
     : Object.keys(data).filter(c => c.includes(input))
   if (list.length === 1)
-    selectUser(list[0])()
+    selectUser(list[0])
   return (
     <Segment className="userlist">
       <Input
@@ -39,4 +39,5 @@ const UserList = ({ data, selectUser }) => {
     </Segment>
   )
 }
+
 export default UserList

@@ -6,14 +6,17 @@ import 'semantic-ui-css/semantic.min.css'
 import './style.css'
 
 const Index = () => {
-  const [{ data, loading, error }] = GetJson(
+  const [{ data, loading, error }, refetch] = GetJson(
     'https://ricedb.api.revthefox.co.uk/',
   )
   return (
     <>
-      {loading && 'Loading'}
+      {!data && 'Loading'}
       {error && error.message}
-      {data ? <Main data={data} /> : ''}
+      {data ? <Main
+        data={data}
+        loading={loading}
+        refetch={refetch} /> : ''}
     </>
   )
 }

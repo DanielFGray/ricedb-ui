@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Label } from 'semantic-ui-react'
+import { Button, Icon, Menu, Label } from 'semantic-ui-react'
 import Iconify from './Iconify'
 
 const categories = data =>
@@ -8,13 +8,13 @@ const categories = data =>
       .reduce((p, { last_seen, deadsince, ...c }) => p.concat(Object.keys(c)), [])
   )]
 
-const Nav = ({ data, activeCategory, selectCategory }) => (
+const Nav = ({ data, activeCategory, selectCategory, refetch, loading }) => (
   <Menu pointing stackable className="nav">
     {['all'].concat(categories(data))
       .map(c => (
         <Menu.Item
           key={c}
-          onClick={selectCategory(c)}
+          onClick={() => selectCategory(c)}
           active={activeCategory === c}
         >
           {c}
@@ -25,6 +25,13 @@ const Nav = ({ data, activeCategory, selectCategory }) => (
           )}
         </Menu.Item>
       ))}
+    <Menu.Menu position="right">
+      <Menu.Item>
+        <Button icon onClick={refetch} disabled={loading}>
+          <Icon name="refresh" color="green" />
+        </Button>
+      </Menu.Item>
+    </Menu.Menu>
   </Menu>
 )
 
