@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import GetJson from './GetJson'
-import Main, { Stringify } from './Main'
+import Main from './Main'
 import 'semantic-ui-css/semantic.min.css'
 import './style.css'
 
@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <>
       {loading && 'Loading'}
-      {error && Stringify({ error: error.message })}
+      {error && error.message}
       {data ? <Main data={data} /> : ''}
     </>
   )
