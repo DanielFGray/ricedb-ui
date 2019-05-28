@@ -4,10 +4,10 @@ body {
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-areas:
-    "nav nav nav nav "
-    "list content content content";
+    "nav nav nav "
+    "list content content";
 }
 .nav {
   grid-area: nav;
