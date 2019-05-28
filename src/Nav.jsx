@@ -1,6 +1,7 @@
 import React from 'react'
-import { Menu, Label } from 'semantic-ui-react'
-import Iconify from './Iconify'
+import { Menu } from 'semantic-ui-react'
+// import { Menu, Label } from 'semantic-ui-react'
+// import Iconify from './Iconify'
 
 const categories = data =>
   [...new Set(
