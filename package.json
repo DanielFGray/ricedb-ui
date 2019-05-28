@@ -1,6 +1,7 @@
 {
-  "name": "new",
-  "version": "1.0.0",
+
+  "name": "ricedb-ui",
+  "version": "0.1.0",
   "description": "",
   "keywords": [],
   "main": "src/index.js",

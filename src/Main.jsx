@@ -10,6 +10,8 @@ export const Stringify = ({ className, style, ...data }) => (
   </pre>
 )
 
+const has = (k, o) => Object.prototype.hasOwnProperty.call(o, k)
+
 export default class Main extends React.Component {
   state = {
     user: null,
@@ -29,7 +31,7 @@ export default class Main extends React.Component {
     const userList =
       this.state.category !== 'all'
         ? Object.entries(data)
-            .filter(([k, v]) => v[this.state.category] !== undefined)
+            .filter(([, v]) => has(this.state.category, v))
             .reduce((p, [k, v]) => Object.assign(p, { [k]: v }), {})
         : data
     return (
