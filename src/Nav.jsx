@@ -1,7 +1,6 @@
 import React from 'react'
-import { Menu } from 'semantic-ui-react'
-// import { Menu, Label } from 'semantic-ui-react'
-// import Iconify from './Iconify'
+import { Menu, Label } from 'semantic-ui-react'
+import Iconify from './Iconify'
 
 const categories = data =>
   [...new Set(
@@ -10,7 +9,7 @@ const categories = data =>
   )]
 
 const Nav = ({ data, activeCategory, selectCategory }) => (
-  <Menu pointing compact className="nav">
+  <Menu pointing stackable className="nav">
     {['all'].concat(categories(data))
       .map(c => (
         <Menu.Item
@@ -19,7 +18,11 @@ const Nav = ({ data, activeCategory, selectCategory }) => (
           active={activeCategory === c}
         >
           {c}
-          {/*k !== 'all' && <Label as="svg"><Iconify icon={k} size="1x" /></Label>*/}
+          {c !== 'all' && (
+            <Label>
+              <Iconify icon={c} size="1x" />
+            </Label>
+          )}
         </Menu.Item>
       ))}
   </Menu>

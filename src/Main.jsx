@@ -1,7 +1,7 @@
 import React from 'react'
 import Nav from './Nav'
 
-import Users from './Users'
+import UserList from './Users'
 import Display from './Display'
 
 export const Stringify = ({ className, style, ...data }) => (
@@ -28,28 +28,29 @@ export default class Main extends React.Component {
 
   render() {
     const { data } = this.props
+    const { category } = this.state
     const userList =
       this.state.category !== 'all'
         ? Object.entries(data)
-            .filter(([, v]) => has(this.state.category, v))
+            .filter(([, value]) => has(category, value))
             .reduce((p, [k, v]) => Object.assign(p, { [k]: v }), {})
         : data
     return (
       <div className="wrapper">
         <Nav
           data={data}
-          activeCategory={this.state.category}
+          activeCategory={category}
           selectCategory={this.selectCategory}
         />
         <div class="displayarea">
           {this.state.user &&
             Display({
-              category: this.state.category,
+              category,
               name: this.state.user,
               ...data[this.state.user],
             })}
         </div>
-        <Users data={userList} selectUser={this.selectUser} />
+        <UserList data={userList} selectUser={this.selectUser} />
       </div>
     )
   }
