@@ -1,5 +1,6 @@
 import React from 'react'
-import { type } from 'ramda'
+
+const type = x => Object.prototype.toString.call(x).slice(8, -1)
 
 const makeEmbeddable = x => {
   if (/\.(png|jpe?g|gif)$/.test(x)) {

@@ -1,0 +1,28 @@
+body {
+  margin: 1em;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-areas:
+    "nav nav nav nav "
+    "list content content content";
+}
+.nav {
+  grid-area: nav;
+}
+
+
+.userlist {
+  grid-area: list;
+}
+
+.displayarea {
+  margin: 1em;
+  grid-area: content;
+  text-align: center;
+}
+
+.displayarea ul {
+  list-style: none;
+}

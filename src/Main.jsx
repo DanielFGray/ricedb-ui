@@ -2,7 +2,6 @@ import React from 'react'
 import Nav from './Nav'
 
 import Users from './Users'
-import { pipe, filter, fromPairs } from 'ramda'
 import Display from './Display'
 
 export const Stringify = ({ className, style, ...data }) => (
@@ -29,11 +28,9 @@ export default class Main extends React.Component {
     const { data } = this.props
     const userList =
       this.state.category !== 'all'
-        ? fromPairs(
-            Object.entries(data).filter(
-              ([k, v]) => v[this.state.category] !== undefined,
-            ),
-          )
+        ? Object.entries(data)
+            .filter(([k, v]) => v[this.state.category] !== undefined)
+            .reduce((p, [k, v]) => Object.assign(p, { [k]: v }), {})
         : data
     return (
       <div className="wrapper">

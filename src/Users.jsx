@@ -1,12 +1,8 @@
 import React from 'react'
 import Iconify from './Iconify'
 import { List, Segment, LabelGroup, Label } from 'semantic-ui-react'
-import { pipe, omit } from 'ramda'
 
-const categories = pipe(
-  omit(['last_seen', 'deadsince']),
-  Object.keys,
-)
+const categories = ({ last_seen, deadsince, ...x }) => Object.keys(x)
 
 const User = ({ name, data, selectUser }) => (
   <List.Item key={name} onClick={selectUser(name)}>
@@ -19,7 +15,7 @@ const User = ({ name, data, selectUser }) => (
           </Label>
         ))}
       </LabelGroup>
-        </List.Content>*/}
+    </List.Content>*/}
   </List.Item>
 )
 
