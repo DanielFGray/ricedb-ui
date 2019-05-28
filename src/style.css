@@ -4,6 +4,7 @@ body {
 
 .wrapper {
   display: grid;
+  grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
     "nav nav nav nav "
     "list content content content";
@@ -25,4 +26,8 @@ body {
 
 .displayarea ul {
   list-style: none;
+}
+
+.label svg {
+  height: 1.25em;
 }
