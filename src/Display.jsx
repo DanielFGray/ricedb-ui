@@ -30,8 +30,8 @@ const entry = ([k, v]) => (
   <div className={`entry ${k}`} key={k}>
     <h3>{k}</h3>
     <ul>
-      {type(v) === 'Array'
-        ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
+      {type(v) === 'Array' ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
+        : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
         : v}
     </ul>
   </div>
