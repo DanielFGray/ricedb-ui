@@ -1,15 +1,15 @@
-import React from 'react'
-import { List, Segment, LabelGroup, Label } from 'semantic-ui-react'
+import React, { useState } from 'react'
+import { Input, List, Segment, LabelGroup, Label } from 'semantic-ui-react'
 import Iconify from './Iconify'
 
-const categories = ({ last_seen, deadsince, ...x }) => Object.keys(x)
+const withoutTimes = ({ last_seen, deadsince, ...x }) => x
 
 const User = ({ name, data, selectUser }) => (
   <List.Item key={name} onClick={selectUser(name)}>
     {name}
     <List.Content floated="right">
       <LabelGroup>
-        {categories(data).map(i => (
+        {Object.keys(withoutTimes(data)).map(i => (
           <Label size="tiny" key={i}>
             <Iconify icon={i} size="1x" />
           </Label>
@@ -19,14 +19,24 @@ const User = ({ name, data, selectUser }) => (
   </List.Item>
 )
 
-const UserList = ({ data, selectUser }) =>
-  (
-  <Segment className="userlist">
-    <List selection compact>
-      {Object.keys(data)
-        .map(name => User({ name, data: data[name], selectUser }))}
-    </List>
-  </Segment>
-)
-
+const UserList = ({ data, selectUser }) => {
+  const [input, inputChange] = useState('')
+  const list = input === '' ? Object.keys(data)
+    : Object.keys(data).filter(c => c.includes(input))
+  if (list.length === 1)
+    selectUser(list[0])()
+  return (
+    <Segment className="userlist">
+      <Input
+        value={input}
+        onChange={e => inputChange(e.target.value)}
+        placeholder="Search"
+        fluid
+      />
+      <List selection compact>
+        {list.map(name => User({ name, data: data[name], selectUser }))}
+      </List>
+    </Segment>
+  )
+}
 export default UserList
