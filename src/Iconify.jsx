@@ -12,27 +12,22 @@ import { faLink } from '@fortawesome/free-solid-svg-icons/faLink'
 import { faLinux } from '@fortawesome/free-brands-svg-icons/faLinux'
 import { faGitAlt } from '@fortawesome/free-brands-svg-icons/faGitAlt'
 
-export default function Iconify({ icon, ...x }) {
-  return (
-    <FontAwesomeIcon
-      i={
-        {
-          dtops: faImages,
-          lastfm: faMusic,
-          selfies: faUser,
-          dotfiles: faGitAlt,
-          distros: faLinux,
-          homescreens: faMobileAlt,
-          stations: faDesktop,
-          pets: faPaw,
-          handwritings: faPenAlt,
-          websites: faLink,
-        }[icon]
-      }
-      {...x}
-    />
-  )
-}
+const lookup = k => ({
+  dtops: faImages,
+  lastfm: faMusic,
+  selfies: faUser,
+  dotfiles: faGitAlt,
+  distros: faLinux,
+  homescreens: faMobileAlt,
+  stations: faDesktop,
+  pets: faPaw,
+  handwritings: faPenAlt,
+  websites: faLink,
+}[k])
+
+const Iconify = ({ icon, ...x }) => (
+  <FontAwesomeIcon i={lookup(icon)} {...x} />
+)
 
 export const FontAwesomeIcon = React.memo(
   ({ i, size, className = '', ...props }) => {
@@ -94,3 +89,5 @@ FontAwesomeIcon.defaultProps = {
   i: null,
   size: null,
 }
+
+export default Iconify
