@@ -11,8 +11,10 @@ pages:
   stage: deploy
   script:
     - yarn build
+    - rm -fr public
+    - mv build public
   artifacts:
     paths:
-      - build
+      - public
   only:
     - master
