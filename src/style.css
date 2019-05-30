@@ -1,3 +1,11 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 1em;
 }
@@ -16,6 +24,11 @@ body {
 
 .userlist {
   grid-area: list;
+}
+
+.nicklist {
+  overflow-y: scroll;
+  height: 75vh;
 }
 
 .displayarea {
