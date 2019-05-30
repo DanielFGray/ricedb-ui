@@ -1,13 +1,26 @@
 import React from 'react'
+import { Embed, Modal, Image } from 'semantic-ui-react'
 
 const type = x => Object.prototype.toString.call(x).slice(8, -1)
 
 const makeEmbeddable = x => {
   if (/\.(png|jpe?g|gif)$/.test(x)) {
-    return (
-      <a href={x}>
-        <img src={x} alt={x} width="75%" />
+    const link = (
+      <a
+        href={x}
+        target="__blank"
+        rel="noopener noreferrer"
+        onClick={e => e.preventDefault()}
+      >
+        <Image src={x} alt={x} />
       </a>
+    )
+    return (
+      <Modal basic trigger={link}>
+        <Modal.Content>
+          {link}
+        </Modal.Content>
+      </Modal>
     )
   } else if (/.(mp4|webm)$/.test(x)) {
     return (
