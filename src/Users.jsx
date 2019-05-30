@@ -33,7 +33,7 @@ const UserList = ({ data, selectUser }) => {
         placeholder="Search"
         fluid
       />
-      <List selection compact>
+      <List selection compact className="nicklist">
         {list.map(name => User({ name, data: data[name], selectUser }))}
       </List>
     </Segment>
