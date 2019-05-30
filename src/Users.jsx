@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { Input, List, Segment, LabelGroup, Label } from 'semantic-ui-react'
+import {
+  Input,
+  Label,
+  LabelGroup,
+  List,
+  Segment,
+} from 'semantic-ui-react'
 import Iconify from './Iconify'
 
 const withoutTimes = ({ last_seen, deadsince, ...x }) => x
@@ -21,10 +27,14 @@ const User = ({ name, data, selectUser }) => (
 
 const UserList = ({ data, selectUser }) => {
   const [input, inputChange] = useState('')
-  const list = input === '' ? Object.keys(data)
-    : Object.keys(data).filter(c => c.toLowerCase().includes(input.toLowerCase()))
+  const list = input === ''
+    ? Object.keys(data)
+    : Object.keys(data)
+      .filter(c => c.toLowerCase().includes(input.toLowerCase()))
+
   if (list.length === 1)
     selectUser(list[0])
+
   return (
     <Segment className="userlist">
       <Input

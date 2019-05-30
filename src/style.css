@@ -17,10 +17,10 @@ body {
     "nav nav nav "
     "list content content";
 }
+
 .nav {
   grid-area: nav;
 }
-
 
 .userlist {
   grid-area: list;
