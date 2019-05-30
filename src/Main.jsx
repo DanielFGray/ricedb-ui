@@ -1,4 +1,9 @@
 import React, { useState } from 'react'
+import {
+  Segment,
+  Dimmer,
+  Loader,
+} from 'semantic-ui-react'
 import Nav from './Nav'
 
 import UserList from './Users'
@@ -28,6 +33,15 @@ const Main = ({ data, refetch, loading }) => {
         loading={loading}
       />
       <div class="displayarea">
+        {loading && (
+          <Segment placeholder>
+            <Dimmer active inverted>
+              <Loader size="huge" indeterminate>
+                Blame Leliana for slow load times
+              </Loader>
+            </Dimmer>
+          </Segment>
+        )}
         {user &&
           Display({
             category,

@@ -11,12 +11,12 @@ const Index = () => {
   )
   return (
     <>
-      {!data && 'Loading'}
       {error && error.message}
-      {data ? <Main
-        data={data}
+      <Main
+        data={data || {}}
         loading={loading}
-        refetch={refetch} /> : ''}
+        refetch={refetch}
+      />
     </>
   )
 }
