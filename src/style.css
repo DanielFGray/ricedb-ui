@@ -27,7 +27,7 @@ body {
 }
 
 .nicklist {
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 75vh;
 }
 
