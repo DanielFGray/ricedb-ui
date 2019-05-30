@@ -22,7 +22,7 @@ const User = ({ name, data, selectUser }) => (
 const UserList = ({ data, selectUser }) => {
   const [input, inputChange] = useState('')
   const list = input === '' ? Object.keys(data)
-    : Object.keys(data).filter(c => c.includes(input))
+    : Object.keys(data).filter(c => c.toLowerCase().includes(input.toLowerCase()))
   if (list.length === 1)
     selectUser(list[0])
   return (
