@@ -30,6 +30,10 @@ const UserList = ({ data, selectUser }) => {
       <Input
         value={input}
         onChange={e => inputChange(e.target.value)}
+        onKeyPress={e => {
+          if (e.key === 'Enter')
+            selectUser(list[0])
+        }}
         placeholder="Search"
         fluid
       />
