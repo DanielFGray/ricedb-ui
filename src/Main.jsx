@@ -15,7 +15,10 @@ const Main = ({ data, refetch, loading }) => {
   const [user, selectUser] = useState(null)
   const [category, selectCategory] = useState('all')
 
-  let userList = React.useMemo(() => Object.keys(data).filter(x => Object.keys(withoutTimes(data[x])).length > 0), [data])
+  let userList = React.useMemo(() => Object.keys(data)
+    .reverse()
+
+    .filter(x => Object.keys(withoutTimes(data[x])).length > 0), [data])
 
   if (category !== 'all')
     userList = userList.filter(u => has(category, data[u]))
@@ -33,8 +36,8 @@ const Main = ({ data, refetch, loading }) => {
         {loading && (
           <Segment placeholder>
             <Dimmer active inverted>
-              <Loader size="huge" indeterminate>
-                Blame Leliana for slow load times
+              <Loader size="large" indeterminate>
+                Loading...
               </Loader>
             </Dimmer>
           </Segment>

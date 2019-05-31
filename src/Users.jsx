@@ -23,7 +23,7 @@ const User = React.memo(({ name, data, selectUser }) => (
       </LabelGroup>
     </List.Content>
   </List.Item>
-))
+), (a, b) => a.name === b.name)
 
 const UserList = ({ data, userList, selectUser }) => {
   const [input, inputChange] = useState('')
