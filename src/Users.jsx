@@ -11,7 +11,7 @@ import Iconify from './Iconify'
 export const withoutTimes = ({ last_seen, deadsince, ...x }) => x
 
 const User = React.memo(({ name, data, selectUser }) => (
-  <List.Item key={name} onClick={() => selectUser(name)}>
+  <List.Item onClick={() => selectUser(name)}>
     {name}
     <List.Content floated="right">
       <LabelGroup>
@@ -52,6 +52,7 @@ const UserList = ({ data, userList, selectUser }) => {
       <List selection compact className="nicklist">
         {list.map(name => (
           <User
+            key={name}
             name={name}
             data={data[name]}
             selectUser={selectUser}
