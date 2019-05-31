@@ -8,9 +8,9 @@ import {
 } from 'semantic-ui-react'
 import Iconify from './Iconify'
 
-const withoutTimes = ({ last_seen, deadsince, ...x }) => x
+export const withoutTimes = ({ last_seen, deadsince, ...x }) => x
 
-const User = ({ name, data, selectUser }) => (
+const User = React.memo(({ name, data, selectUser }) => (
   <List.Item key={name} onClick={() => selectUser(name)}>
     {name}
     <List.Content floated="right">
@@ -23,17 +23,15 @@ const User = ({ name, data, selectUser }) => (
       </LabelGroup>
     </List.Content>
   </List.Item>
-)
+))
 
-const UserList = ({ data, selectUser }) => {
+const UserList = ({ data, userList, selectUser }) => {
   const [input, inputChange] = useState('')
-  const list = input === ''
-    ? Object.keys(data)
-    : Object.keys(data)
-      .filter(c => c.toLowerCase().includes(input.toLowerCase()))
+  let list = userList
+  if (input !== '')
+    list = list.filter(c => c.toLowerCase().includes(input.toLowerCase()))
 
-  if (list.length === 1)
-    selectUser(list[0])
+  if (list.length === 1) selectUser(list[0])
 
   return (
     <Segment className="userlist">
@@ -48,7 +46,13 @@ const UserList = ({ data, selectUser }) => {
         fluid
       />
       <List selection compact className="nicklist">
-        {list.map(name => User({ name, data: data[name], selectUser }))}
+        {list.map(name => (
+          <User
+            name={name}
+            data={data[name]}
+            selectUser={selectUser}
+          />
+        ))}
       </List>
     </Segment>
   )

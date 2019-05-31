@@ -50,7 +50,7 @@ const entry = ([k, v]) => (
   </div>
 )
 
-const Display = ({ name, category, last_seen, deadsince, ...data }) => (
+const Display = ({ name, category, data: { deadsince, last_seen, ...data } }) => (
   <>
     <h2>{name}</h2>
     {category !== 'all' && data[category]

@@ -6,7 +6,7 @@ import {
 } from 'semantic-ui-react'
 import Nav from './Nav'
 
-import UserList from './Users'
+import UserList, { withoutTimes } from './Users'
 import Display from './Display'
 
 const has = (k, o) => Object.prototype.hasOwnProperty.call(o, k)
@@ -15,14 +15,11 @@ const Main = ({ data, refetch, loading }) => {
   const [user, selectUser] = useState(null)
   const [category, selectCategory] = useState('all')
 
-  const userList = category !== 'all'
-    ? Object.entries(data)
-      .reduce((p, [k, v]) => (
-        has(category, v)
-          ? Object.assign(p, { [k]: v })
-          : p
-      ), {})
-    : data
+  let userList = React.useMemo(() => Object.keys(data).filter(x => Object.keys(withoutTimes(data[x])).length > 0), [data])
+
+  if (category !== 'all')
+    userList = userList.filter(u => has(category, data[u]))
+
   return (
     <div className="wrapper">
       <Nav
@@ -42,14 +39,20 @@ const Main = ({ data, refetch, loading }) => {
             </Dimmer>
           </Segment>
         )}
-        {user &&
-          Display({
-            category,
-            name: user,
-            ...data[user],
-          })}
+        {user && (
+          <Display
+            category={category}
+            name={user}
+            data={data[user]}
+          />
+        )}
       </div>
-      <UserList data={userList} selectUser={selectUser} activeUser={user} />
+      <UserList
+        userList={userList}
+        data={data}
+        selectUser={selectUser}
+        activeUser={user}
+      />
     </div>
   )
 }
