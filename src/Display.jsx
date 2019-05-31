@@ -1,5 +1,5 @@
 import React from 'react'
-import { Embed, Modal, Image } from 'semantic-ui-react'
+import { Modal, Image } from 'semantic-ui-react'
 
 const type = x => Object.prototype.toString.call(x).slice(8, -1)
 
