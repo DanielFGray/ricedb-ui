@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import GetJson from './GetJson'
 import Main from './Main'
-import { Message, Icon } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import './style.css'
 
@@ -11,14 +10,12 @@ const Index = () => {
     'https://ricedb.api.revthefox.co.uk/',
   )
   return (
-    <>
-      {error && <Message warning><Icon name="warning" />{error.message}</Message>}
-      <Main
-        data={data || {}}
-        loading={loading}
-        refetch={refetch}
-      />
-    </>
+    <Main
+      data={data || {}}
+      error={error}
+      loading={loading}
+      refetch={refetch}
+    />
   )
 }
 
