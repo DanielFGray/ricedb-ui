@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Input,
   Label,
@@ -27,16 +27,20 @@ const User = React.memo(({ name, data, selectUser }) => (
 
 const UserList = ({ data, userList, selectUser }) => {
   const [input, inputChange] = useState('')
+  const inputRef = useRef(null)
   let list = userList
   if (input !== '')
     list = list.filter(c => c.toLowerCase().includes(input.toLowerCase()))
 
   if (list.length === 1) selectUser(list[0])
 
+  useEffect(() => inputRef.current.focus(), [])
+
   return (
     <Segment className="userlist">
       <Input
         value={input}
+        ref={inputRef}
         onChange={e => inputChange(e.target.value)}
         onKeyPress={e => {
           if (e.key === 'Enter')
