@@ -51,6 +51,7 @@ const Controls = ({ name, changeUser }) => {
         selection
         clearable
         search
+        placeholder="Filter by categories"
         disabled={loading}
         options={categories}
         value={cats}
