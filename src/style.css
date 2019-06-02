@@ -14,12 +14,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-areas:
-    "nav nav nav "
     "list content content";
-}
-
-.nav {
-  grid-area: nav;
 }
 
 .userlist {

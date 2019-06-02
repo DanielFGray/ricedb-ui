@@ -1,63 +1,33 @@
-import React, { useState } from 'react'
-import {
-  Segment,
-  Dimmer,
-  Loader,
-} from 'semantic-ui-react'
+import React, { useEffect, useContext } from 'react'
 import { Message, Icon } from 'semantic-ui-react'
-import Nav from './Nav'
+import { ctx } from './index'
 
-import UserList, { withoutTimes } from './Users'
+import Controls from './Controls'
 import Display from './Display'
 
-const has = (k, o) => Object.prototype.hasOwnProperty.call(o, k)
+const Main = ({ match, history }) => {
+  const { error } = useContext(ctx)
+  const name = match.params.name || ""
 
-const Main = ({ data, refetch, loading, error }) => {
-  const [user, selectUser] = useState(null)
-  const [category, selectCategory] = useState('all')
+  useEffect(() => {
+    if (error)
+      console.error(error)
+  }, [error])
 
-  let userList = React.useMemo(() => Object.keys(data)
-    .reverse()
-    .filter(x => Object.keys(withoutTimes(data[x])).length > 0), [data])
-
-  if (category !== 'all')
-    userList = userList.filter(u => has(category, data[u]))
+  const changeUser = user => {
+    history.push(`/${user}`)
+  }
 
   return (
     <>
-      {error && <Message warning><Icon name="warning" />{error.message}</Message>}
+      {error && (
+        <Message warning>
+          <Icon name="warning" />{error.message}
+        </Message>
+      )}
       <div className="wrapper">
-        <Nav
-          data={data}
-          activeCategory={category}
-          selectCategory={selectCategory}
-          refetch={refetch}
-          loading={loading}
-        />
-        <div class="displayarea">
-          {loading && (
-            <Segment placeholder>
-              <Dimmer active inverted>
-                <Loader size="large" indeterminate>
-                  Loading...
-                </Loader>
-              </Dimmer>
-            </Segment>
-          )}
-          {user && (
-            <Display
-              category={category}
-              name={user}
-              data={data[user]}
-            />
-          )}
-        </div>
-        <UserList
-          userList={userList}
-          data={data}
-          selectUser={selectUser}
-          activeUser={user}
-        />
+        <Display name={name} />
+        <Controls name={name} changeUser={changeUser} />
       </div>
     </>
   )

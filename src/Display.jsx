@@ -1,7 +1,12 @@
-import React from 'react'
-import { Modal, Image } from 'semantic-ui-react'
-
-const type = x => Object.prototype.toString.call(x).slice(8, -1)
+import React, { useContext } from 'react'
+import {
+  Segment,
+  Modal,
+  Image,
+} from 'semantic-ui-react'
+import ago from 's-ago'
+import { ctx } from './index'
+import { type } from 'ramda'
 
 const makeEmbeddable = x => {
   if (/\.(png|jpe?g|gif)$/.test(x)) {
@@ -39,23 +44,36 @@ const makeEmbeddable = x => {
   return x
 }
 
-const entry = ([k, v]) => (
-  <div className={`entry ${k}`} key={k}>
-    <h3>{k}</h3>
-    <ul>
-      {type(v) === 'Array' ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
-        : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
-        : v}
-    </ul>
-  </div>
-)
+const niceDate = (timestamp, label) => {
+  if (!timestamp) return null
+  const d = new Date(timestamp * 1000)
+  return (
+    <div>{label}: {ago(d)} {d.toLocaleString()}</div>
+  )
+}
 
-const Display = ({ name, category, data: { deadsince, last_seen, ...data } }) => (
-  <>
-    <h2>{name}</h2>
-    {category !== 'all' && data[category]
-      ? entry([category, data[category]])
-      : Object.entries(data).map(entry)}
-  </>
-)
+const Display = ({ name }) => {
+  const { data, loading } = useContext(ctx)
+  const { deadsince, last_seen, ...userData } = data[name] || {}
+  return (
+    <Segment className="displayarea" loading={loading}>
+      <Segment vertical>
+        <h2>{name}</h2>
+        {niceDate(last_seen, 'last seen')}
+        {niceDate(deadsince, 'dead since')}
+      </Segment>
+      {Object.entries(userData).map(([k, v]) => (
+        <Segment vertical className={`entry ${k}`} key={k}>
+          <h3>{k}</h3>
+          <ul>
+            {type(v) === 'Array' ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
+              : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
+              : v}
+            </ul>
+        </Segment>
+      ))}
+    </Segment>
+  )
+}
+
 export default Display
