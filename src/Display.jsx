@@ -6,7 +6,6 @@ import {
 } from 'semantic-ui-react'
 import ago from 's-ago'
 import { ctx } from './index'
-import { type } from 'ramda'
 
 const makeEmbeddable = x => {
   if (/\.(png|jpe?g|gif)$/.test(x)) {
@@ -66,7 +65,7 @@ const Display = ({ name }) => {
         <Segment vertical className={`entry ${k}`} key={k}>
           <h3>{k}</h3>
           <ul>
-            {type(v) === 'Array' ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
+            {v instanceof Array ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
               : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
               : v}
             </ul>

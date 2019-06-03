@@ -14,21 +14,17 @@ const Index = () => {
   )
   const data = res || {}
 
+  const stripMeta = ({ last_seen, deadsince, ...rest }) => rest
+
   const userList = useMemo(() => {
     const actives = Object.keys(data)
-      .filter(name => {
-        const { last_seen, deadsince, ...rest } = data[name]
-        return Object.keys(rest).length > 0
-      })
+      .filter(name => Object.keys(stripMeta(data[name])).length > 0)
     return actives.reverse()
   }, [data])
 
   const categories = useMemo(() => {
     const withDupes = Object.values(data)
-      .reduce((p, c) => {
-        const { deadsince, last_seen, ...withoutTimes } = c
-        return p.concat(Object.keys(withoutTimes))
-      }, [])
+      .reduce((p, c) => p.concat(Object.keys(stripMeta(c))), [])
     return [...new Set(withDupes)]
       .map(key => ({ key, value: key, text: key }))
   }, [data])

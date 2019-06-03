@@ -6,8 +6,10 @@ import {
   Dropdown,
 } from 'semantic-ui-react'
 import { ctx } from './index'
-import { has } from 'ramda'
 import User from './User'
+
+const has = obj => Object.prototype.hasOwnProperty.bind(obj)
+const kontains = b => a => a.toLowerCase().includes(b.toLowerCase())
 
 const Controls = ({ name, changeUser }) => {
   const [input, input$] = useState('')
@@ -18,9 +20,9 @@ const Controls = ({ name, changeUser }) => {
   const list = React.useMemo(() => {
     let u = userList
     if (input !== '')
-      u = userList.filter(n => n.toLowerCase().includes(input.toLowerCase()))
+      u = u.filter(kontains(input))
     if (cats.length > 0)
-      u = userList.filter(n => cats.every(c => has(c, data[n])))
+      u = u.filter(n => cats.every(has(data[n])))
     return u
   }, [input, userList, cats, data])
 
