@@ -17,20 +17,17 @@ const Controls = ({ name, changeUser }) => {
   const inputRef = useRef(null)
   const { data, loading, categories, userList } = useContext(ctx)
 
-  const list = React.useMemo(() => {
-    let u = userList
-    if (input !== '')
-      u = u.filter(kontains(input))
-    if (cats.length > 0)
-      u = u.filter(n => cats.every(has(data[n])))
-    return u
-  }, [input, userList, cats, data])
+  let list = userList
+  if (input !== '')
+    list = list.filter(kontains(input))
+  if (cats.length > 0)
+    list = list.filter(n => cats.every(has(data[n])))
 
   useEffect(() => {
-    if (list.length === 1) {
+    if (list.length === 1 && name !== list[0]) {
       changeUser(list[0])
     }
-  }, [list, changeUser])
+  }, [list, changeUser, name])
 
   useEffect(() => inputRef.current.focus(), [])
 
