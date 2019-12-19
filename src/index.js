@@ -4,9 +4,8 @@ import { Switch, Route, HashRouter as Router } from 'react-router-dom'
 import GetJson from './GetJson'
 import Main from './Main'
 import 'semantic-ui-css/semantic.min.css'
+import ctx from './ctx'
 import './style.css'
-
-export const ctx = React.createContext(null)
 
 const Index = () => {
   const [{ data: res, loading, error }, refetch] = GetJson(
@@ -24,8 +23,8 @@ const Index = () => {
 
   const categories = useMemo(() => {
     const withDupes = Object.values(data)
-      .reduce((p, c) => p.concat(Object.keys(stripMeta(c))), [])
-    return [...new Set(withDupes)]
+      .flatMap(c => Object.keys(stripMeta(c)))
+    return Array.from(new Set(withDupes))
       .map(key => ({ key, value: key, text: key }))
   }, [data])
 

@@ -1,78 +1,67 @@
 import React, { useContext } from 'react'
-import {
-  Segment,
-  Modal,
-  Image,
-} from 'semantic-ui-react'
 import ago from 's-ago'
-import { ctx } from './index'
+import ctx from './ctx'
 
-const makeEmbeddable = x => {
+function makeEmbeddable(x) {
   if (/\.(png|jpe?g|gif)$/.test(x)) {
-    const link = (
+    return (
       <a
         href={x}
         target="__blank"
         rel="noopener noreferrer"
         onClick={e => e.preventDefault()}
       >
-        <Image src={x} alt={x} />
+        <img src={x} alt={x} style={{ maxWidth: '50vw' }} />
       </a>
     )
-    return (
-      <Modal basic trigger={link}>
-        <Modal.Content>
-          {link}
-        </Modal.Content>
-      </Modal>
-    )
-  } else if (/.(mp4|webm)$/.test(x)) {
+  }
+  if (/.(mp4|webm)$/.test(x)) {
     return (
       <video
-        src={x}
         width="75%"
-        autoPlay="true"
-        controls="trues"
-        muted="true"
+        autoPlay
+        controls
+        muted
         loop="forever"
-      />
+      >
+        <source src={x} type={`video/${x.match(/\.(\w+)$/g).pop()}`} />
+      </video>
     )
-  } else if (x.startsWith('http')) {
+  }
+  if (x.startsWith('http')) {
     return <a href={x}>{x}</a>
   }
   return x
 }
 
-const niceDate = (timestamp, label) => {
-  if (!timestamp) return null
+function niceDate(timestamp, label) {
+  if (! timestamp) return null
   const d = new Date(timestamp * 1000)
   return (
     <div>{label}: {ago(d)} {d.toLocaleString()}</div>
   )
 }
 
-const Display = ({ name }) => {
-  const { data, loading } = useContext(ctx)
-  const { deadsince, last_seen, ...userData } = data[name] || {}
+export default function Display({ name }) {
+  const { data } = useContext(ctx)
+  const { deadsince, last_seen: lastSeen, ...userData } = data[name] || {}
   return (
-    <Segment className="displayarea" loading={loading}>
-      <Segment vertical>
+    <div className="displayarea">
+      <div>
         <h2>{name}</h2>
-        {niceDate(last_seen, 'last seen')}
+        {niceDate(lastSeen, 'last seen')}
         {niceDate(deadsince, 'dead since')}
-      </Segment>
+      </div>
       {Object.entries(userData).map(([k, v]) => (
-        <Segment vertical className={`entry ${k}`} key={k}>
+        <div className={`entry ${k}`} key={k}>
           <h3>{k}</h3>
           <ul>
             {v instanceof Array ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
-              : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
-              : v}
-            </ul>
-        </Segment>
+            : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
+            : v}
+          </ul>
+        </div>
       ))}
-    </Segment>
+    </div>
   )
 }
-
-export default Display

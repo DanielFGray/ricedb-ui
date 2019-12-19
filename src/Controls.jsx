@@ -1,17 +1,43 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { memoizeWith } from 'ramda'
 import {
-  Input,
-  Menu,
-  Segment,
   Dropdown,
+  Input,
+  Label,
+  Menu,
+  Popup,
 } from 'semantic-ui-react'
-import { ctx } from './index'
-import User from './User'
+import Iconify from './Iconify'
+import ctx from './ctx'
+
+const withoutTimes = ({ last_seen: _, deadsince, ...x }) => x
+
+const User = memoizeWith(x => x.name, ({ name, userData }) => (
+  <Menu.Item key={name} as={Link} to={`/${name}`}>
+    {name}
+    {Object.keys(withoutTimes(userData)).map(i => {
+      const content = userData[i].map
+        ? `${userData[i].length} ${i}`
+        : i
+      return (
+        <Popup
+          content={content}
+          trigger={
+            <Label size="tiny" key={i}>
+              <Iconify icon={i} size="1x" />
+            </Label>
+          }
+        />
+      )
+    })}
+  </Menu.Item>
+))
 
 const has = obj => Object.prototype.hasOwnProperty.bind(obj)
 const kontains = b => a => a.toLowerCase().includes(b.toLowerCase())
 
-const Controls = ({ name, changeUser }) => {
+export default function Controls({ name, changeUser }) {
   const [input, input$] = useState('')
   const [cats, cats$] = useState([])
   const inputRef = useRef(null)
@@ -32,7 +58,7 @@ const Controls = ({ name, changeUser }) => {
   useEffect(() => inputRef.current.focus(), [])
 
   return (
-    <Segment className="userlist">
+    <div className="userlist">
       <Input
         value={input}
         ref={inputRef}
@@ -42,6 +68,7 @@ const Controls = ({ name, changeUser }) => {
           if (e.key === 'Enter') changeUser(list[0])
         }}
         placeholder="Search"
+        clearable
         fluid
       />
       <Dropdown
@@ -71,8 +98,6 @@ const Controls = ({ name, changeUser }) => {
           />
         ))}
       </Menu>
-    </Segment>
+    </div>
   )
 }
-
-export default Controls

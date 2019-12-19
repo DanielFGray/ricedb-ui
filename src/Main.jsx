@@ -1,11 +1,11 @@
 import React, { useEffect, useContext } from 'react'
 import { Message, Icon } from 'semantic-ui-react'
-import { ctx } from './index'
+import ctx from './ctx'
 
 import Controls from './Controls'
 import Display from './Display'
 
-const Main = ({ match, history }) => {
+export default function Main({ match, history }) {
   const { error } = useContext(ctx)
   const name = match.params.name || ""
 
@@ -32,5 +32,3 @@ const Main = ({ match, history }) => {
     </>
   )
 }
-
-export default Main
