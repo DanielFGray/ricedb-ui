@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import ReactDOM from 'react-dom'
-import { Switch, Route, HashRouter as Router } from 'react-router-dom'
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import GetJson from './GetJson'
 import Main from './Main'
 import 'semantic-ui-css/semantic.min.css'
