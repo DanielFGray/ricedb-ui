@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-export default function useJson(url) {
+export default function useJson(url: string) {
   const [state, state$] = useState({
     data: null,
     loading: false,
     error: null,
   })
-  const setState = patch => state$({ ...state, ...patch })
+  const setState = (patch: any) => state$({ ...state, ...patch })
   const refetch = () => {
     setState({ loading: true })
     fetch(url)
