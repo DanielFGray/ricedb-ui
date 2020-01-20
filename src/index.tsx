@@ -2,7 +2,6 @@ import * as React from 'react'
 import ReactDOM from 'react-dom'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import Display from './Display'
 import Main from './Main'
 import { store } from './store'
 import 'semantic-ui-css/semantic.min.css'
@@ -11,8 +10,10 @@ import './style.css'
 const Init = () => (
   <Provider store={store}>
     <Router>
-      <Route exact path="/" component={Main} />
-      <Route exact path="/:name" component={Main} />
+      <Switch>
+        <Route exact path="/" component={Main} />
+        <Route exact path="/:name" component={Main} />
+      </Switch>
     </Router>
   </Provider>
 )

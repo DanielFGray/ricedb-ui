@@ -1,4 +1,4 @@
-import React, { useEffect, ReactChildren } from 'react'
+import React, { useEffect } from 'react'
 import { Message, Icon } from 'semantic-ui-react'
 import { useSelector } from 'react-redux'
 import { RouteComponentProps } from 'react-router-dom'

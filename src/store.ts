@@ -5,24 +5,8 @@ import {
   combineReducers,
 } from '@reduxjs/toolkit'
 import { descend } from 'ramda'
-import {withoutTimes} from './utils'
-
-export interface RiceDbEntry {
-  deadsince?: number;
-  distros?: string[];
-  dotfiles?: string[];
-  dtops?: string[];
-  handwritings?: string[];
-  lastfm?: string;
-  last_seen?: number;
-  pets?: string[];
-  selfies?: string[];
-  stations?: string[];
-}
-
-export type RiceDb = {
-  [key: string]: RiceDbEntry;
-}
+import { withoutTimes } from './utils'
+import { RiceDbEntry, RiceDb } from './react-app-env.d'
 
 /* eslint-disable no-param-reassign */
 export const remoteSlice = createSlice({

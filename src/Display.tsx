@@ -1,25 +1,34 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import ago from 's-ago'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
 
-function makeEmbeddable(x: string) {
-  if (/^https?:\/\//.test(x)) {
-    return <a href={x}>{x}</a>
+function makeEmbeddable(x: string): string | JSX.Element | (string | JSX.Element)[] {
+  if (x.includes(' ')) {
+    return x.split(' ').flatMap(makeEmbeddable)
   }
-  if (/\.(png|jpe?g|gif)$/.test(x)) {
+  if (/^https?:\/\/.*\.(png|jpe?g|gif)$/.test(x)) {
     return (
-      <a href={x} target="__blank" rel="noopener noreferrer" onClick={e => e.preventDefault()}>
+      <a
+        key={x}
+        href={x}
+        target="__blank"
+        rel="noopener noreferrer"
+        onClick={e => e.preventDefault()}
+      >
         <img src={x} alt={x} style={{ maxWidth: '50vw' }} />
       </a>
     )
   }
-  if (/.(mp4|webm)$/.test(x)) {
+  if (/^https?:\/\/.*\.(mp4|webm)$/.test(x)) {
     return (
-      <video width="75%" autoPlay controls muted loop>
+      <video key={x} width="75%" autoPlay controls muted loop>
         <source src={x} type={`video/${x.match(/\.(\w+)$/g)?.pop()}`} />
       </video>
     )
+  }
+  if (/^https?:\/\//.test(x)) {
+    return <a key={x} href={x}>{x}</a>
   }
   return x
 }

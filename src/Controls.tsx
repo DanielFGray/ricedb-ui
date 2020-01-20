@@ -16,7 +16,8 @@ import {
 import { has } from 'ramda'
 import Iconify from './Iconify'
 import { withoutTimes, Contains } from './utils'
-import { userListSelector, RootState, RiceDbEntry, categoriesSelector, fetchData } from './store'
+import { userListSelector, RootState, categoriesSelector, fetchData } from './store'
+import { RiceDbEntry } from './react-app-env.d'
 
 const User = ({
   active: _a,
