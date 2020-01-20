@@ -5,7 +5,7 @@ import { RootState } from './store'
 
 function makeEmbeddable(x: string): string | JSX.Element | (string | JSX.Element)[] {
   if (x.includes(' ')) {
-    return x.split(' ').flatMap(makeEmbeddable)
+    return x.split(' ').flatMap(makeEmbeddable).join(' ')
   }
   if (/^https?:\/\/.*\.(png|jpe?g|gif)$/.test(x)) {
     return (
