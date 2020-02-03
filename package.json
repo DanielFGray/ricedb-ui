@@ -10,7 +10,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint:css": "stylelint './src/**/*.css'",
-    "lint:js": "eslint --cache --ext=.js,.jsx --ignore-path=.gitignore src",
+    "lint:js": "eslint --cache --ext=.js,.jsx,.ts,.tsx --ignore-path=.gitignore src",
     "lint": "npm-run-all -p 'lint:css --fix' 'lint:js --fix'"
   },
   "browserslist": {
