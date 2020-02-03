@@ -7,7 +7,7 @@ export interface RiceDbEntry {
   dtops?: string[];
   handwritings?: string[];
   lastfm?: string;
-  last_seen?: number;
+  last_seen?: number; // eslint-disable-line camelcase
   pets?: string[];
   selfies?: string[];
   stations?: string[];
