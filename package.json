@@ -4,25 +4,14 @@
   "description": "",
   "keywords": [],
   "main": "src/index.js",
-  "dependencies": {
-    "@fortawesome/free-brands-svg-icons": "5.12.0",
-    "@fortawesome/free-solid-svg-icons": "5.12.0",
-    "history": "^4.9.0",
-    "ramda": "0.26.1",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "3.3.0",
-    "s-ago": "^2.0.1",
-    "semantic-ui-css": "2.4.1",
-    "semantic-ui-react": "0.88.2"
-  },
-  "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:css": "stylelint './src/**/*.css'",
+    "lint:js": "eslint --cache --ext=.js,.jsx --ignore-path=.gitignore src",
+    "lint": "npm-run-all -p 'lint:css --fix' 'lint:js --fix'"
   },
   "browserslist": {
     "production": [
@@ -35,5 +24,44 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "5.12.0",
+    "@fortawesome/free-solid-svg-icons": "5.12.0",
+    "@reduxjs/toolkit": "^1.2.1",
+    "@types/react-redux": "^7.1.5",
+    "history": "^4.9.0",
+    "npm-run-all": "^4.1.5",
+    "ramda": "0.26.1",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-redux": "^7.1.3",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.3.0",
+    "redux": "^4.0.5",
+    "s-ago": "^2.0.1",
+    "semantic-ui-css": "2.4.1",
+    "semantic-ui-react": "0.88.2"
+  },
+  "devDependencies": {
+    "@types/history": "^4.7.4",
+    "@types/node": "^13.1.6",
+    "@types/ramda": "^0.26.39",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-router-dom": "^5.1.3",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-alloy": "^3.5.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
   }
 }

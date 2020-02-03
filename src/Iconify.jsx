@@ -12,7 +12,7 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons/faLinux'
 import { faGitAlt } from '@fortawesome/free-brands-svg-icons/faGitAlt'
 
 function lookup(k) {
-  return {
+  const table = {
     dtops: faImages,
     lastfm: faMusic,
     selfies: faUser,
@@ -23,46 +23,47 @@ function lookup(k) {
     pets: faPaw,
     handwritings: faPenAlt,
     websites: faLink,
-  }[k]
+  }
+  return table[k]
 }
-export default function Iconify ({ icon, ...x }) {
-  return(
-    <FontAwesomeIcon i={lookup(icon)} {...x /* eslint-disable-line react/jsx-props-no-spreading */} />
+
+export default function Iconify({ icon, ...x }) {
+  return (
+    <FontAwesomeIcon i={lookup(icon)} {...x} />
   )
 }
 
-export const FontAwesomeIcon = React.memo(
-  ({ i, size, className = '', ...props }) => {
-    if (! i) {
-      return 'null'
-    }
-    const {
-      icon: [width, height, , , svgPathData],
-      iconName,
-      prefix,
-    } = i
-    return (
-      <svg
-        aria-hidden="true"
-        className={[
-          'svg-inline--fa',
-          `fa-${iconName}`,
-          `fa-w-${Math.ceil((width / height) * 16)}`,
-          size ? `fa-${size}` : '',
-          className,
-        ].join(' ')}
-        data-icon={iconName}
-        data-prefix={prefix}
-        role="img"
-        viewBox={`0 0 ${width} ${height}`}
-        xmlns="http://www.w3.org/2000/svg"
-        {...props /* eslint-disable-line react/jsx-props-no-spreading */}
-      >
-        <path d={svgPathData} fill="currentColor" />
-      </svg>
-    )
-  },
-)
+export const FontAwesomeIcon = React.memo(({ i, size, className = '', ...props }) => {
+  if (! i) return null
+
+  const {
+    icon: [width, height, , , svgPathData],
+    iconName,
+    prefix,
+  } = i
+  return (
+    <svg
+      aria-hidden="true"
+      className={[
+        'svg-inline--fa',
+        `fa-${iconName}`,
+        `fa-w-${Math.ceil((width / height) * 16)}`,
+        size ? `fa-${size}` : '',
+        className,
+      ].join(' ')}
+      data-icon={iconName}
+      data-prefix={prefix}
+      role="img"
+      viewBox={`0 0 ${width} ${height}`}
+      xmlns="http://www.w3.org/2000/svg"
+      {
+        ...props /* eslint-disable-line react/jsx-props-no-spreading */
+      }
+    >
+      <path d={svgPathData} fill="currentColor" />
+    </svg>
+  )
+})
 
 FontAwesomeIcon.displayName = 'FontAwesomeIcon'
 

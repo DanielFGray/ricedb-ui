@@ -1,31 +1,68 @@
+const extensions = ['.ts', '.tsx', '.js', '.jsx']
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   extends: [
-    'react-app',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'airbnb',
-    'plugin:jsx-a11y/recommended',
-    'prettier',
-    'prettier/react',
+    'airbnb/hooks',
+    // 'prettier/@typescript-eslint',
+    // 'plugin:prettier/recommended',
   ],
   plugins: [
-    'jsx-a11y',
+    '@typescript-eslint',
     'prettier',
   ],
   env: {
     browser: true,
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  settings: {
+    react: {
+      pragma: 'React',
+      version: 'detect',
+    },
+    'import/extensions': extensions,
+    'import/parsers': {
+      '@typescript-eslint/parser': extensions,
+    },
+    'import/resolver': {
+      node: {
+        extensions,
+      }
+    },
+  },
+  parserOptions: {
+    project: './tsconfig.json',
   },
   rules: {
     semi: ['error', 'never'],
     indent: ['error', 2, { flatTernaryExpressions: true }],
     'no-unexpected-multiline': 'error',
     'no-nested-ternary': 'off',
+    'no-unused-vars': "off",
     'arrow-parens': ['error', 'as-needed'],
     'space-unary-ops': ['error', { overrides: { '!': true } }],
-    'no-unused-vars': ['error', { argsIgnorePattern: '^_\\d*$' }],
+    'object-curly-newline': 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'react/destructuring-assignment': 'off',
     'react/prop-types': 'off',
-    'react/jsx-props-no-spreading': ['enforce', {
-      explicitSpread: 1,
+    'react/jsx-props-no-spreading': 'off',
+    'valid-jsdoc': 'warn',
+    'react/jsx-filename-extension': ['error', { extensions: ['.tsx', '.jsx'] }],
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/ban-ts-ignore': 'warn',
+    '@typescript-eslint/require-await': 'warn',
+    'import/extensions': ['error', 'ignorePackages', {
+      'ts': 'never',
+      'tsx': 'never',
+      'js': 'never',
+      'jsx': 'never',
     }],
   },
 }
