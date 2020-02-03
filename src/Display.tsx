@@ -2,21 +2,15 @@ import React from 'react'
 import ago from 's-ago'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
+import { Linkify } from './utils'
 
-function makeEmbeddable(x: string, i?: number): JSX.Element {
-  if (x.includes(' ')) {
-    return (
-      <>
-        {x.split(' ').flatMap(makeEmbeddable)}
-      </>
-    )
-  }
+function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   if (/^https?:\/\/.*\.(png|jpe?g|gif)$/i.test(x)) {
     return (
       <a
-        key={x.concat(String(i ?? ''))}
+        key={x}
         href={x}
-        target="__blank"
+        target="_blank"
         rel="noopener noreferrer"
         onClick={e => e.preventDefault()}
       >
@@ -26,19 +20,12 @@ function makeEmbeddable(x: string, i?: number): JSX.Element {
   }
   if (/^https?:\/\/.*\.(mp4|webm)$/i.test(x)) {
     return (
-      <video key={x.concat(String(i ?? ''))} width="75%" autoPlay controls muted loop>
+      <video key={x} width="75%" autoPlay controls muted loop>
         <source src={x} type={`video/${x.match(/\.(\w+)$/g)?.pop()}`} />
       </video>
     )
   }
-  if (/^https?:\/\//.test(x)) {
-    return (
-      <a href={x} key={x.concat(String(i ?? ''))} target="__blank" rel="noopener noreferrer">
-        {x}
-      </a>
-    )
-  }
-  return <>{x}</>
+  return Linkify(x)
 }
 
 function niceDate(label: string, timestamp?: number) {
@@ -46,7 +33,8 @@ function niceDate(label: string, timestamp?: number) {
   const d = new Date(timestamp * 1000)
   return (
     <div>
-      {label}
+      <b>{label}</b>
+      {': '}
       {ago(d)}
       {' '}
       {d.toLocaleString()}
@@ -54,19 +42,20 @@ function niceDate(label: string, timestamp?: number) {
   )
 }
 
+
 export default function Display({ selectedNick }: { selectedNick: string }) {
   const data = useSelector((state: RootState) => state.ricedb.data)
   const { deadsince, last_seen: lastSeen, ...userData } = (data && data[selectedNick]) ?? {}
   return (
     <div className="displayarea">
       <div>
-        <h2>{selectedNick}</h2>
+        <h1>{selectedNick}</h1>
         {niceDate('last seen', lastSeen)}
         {niceDate('dead since', deadsince)}
       </div>
       {Object.entries(userData).map(([k, v]) => (
         <div className={`entry ${k}`} key={k}>
-          <h3>{k}</h3>
+          <h2>{k}</h2>
           <ul>
             {v instanceof Array ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
             : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
