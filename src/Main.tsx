@@ -6,7 +6,7 @@ import { RootState } from './store'
 import Controls from './Controls'
 import Display from './Display'
 
-export default function Main({ match, history }: RouteComponentProps<{ name: string }>) {
+export default function Main({ match, history }: RouteComponentProps<{ name?: string }>) {
   const error = useSelector((state: RootState) => state.ricedb.error)
   const name = match.params.name ?? ''
 

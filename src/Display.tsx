@@ -45,7 +45,8 @@ function niceDate(label: string, timestamp?: number) {
 
 export default function Display({ selectedNick }: { selectedNick: string }) {
   const data = useSelector((state: RootState) => state.ricedb.data)
-  const { deadsince, last_seen: lastSeen, ...userData } = (data && data[selectedNick]) ?? {}
+  const { deadsince, last_seen: lastSeen, nick: _n, ...userData } = data
+    ?.find(x => selectedNick === x.nick) || {}
   return (
     <div className="displayarea">
       <div>

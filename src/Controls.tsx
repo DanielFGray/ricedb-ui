@@ -10,27 +10,25 @@ import {
   Dropdown,
   Input,
   Label,
-  Menu,
   Popup,
+  Menu,
 } from 'semantic-ui-react'
-import { has } from 'ramda'
+import { has, descend } from 'ramda'
 import Iconify from './Iconify'
-import { withoutTimes, Contains } from './utils'
+import { withoutMeta, Contains } from './utils'
 import { userListSelector, RootState, categoriesSelector, fetchData } from './store'
 import { RiceDbEntry } from './react-app-env.d'
 
-const User = ({
-  active: _a,
-  nick,
+const User = React.memo(({
   data,
+  active: _a,
 }: {
-  nick: string;
   active: string;
   data: RiceDbEntry;
 }) => (
-  <Menu.Item key={nick} as={Link} to={`/${nick}`}>
-    {nick}
-    {data && Object.entries(withoutTimes(data)).map(([k, v]) => {
+  <Menu.Item key={data.nick} as={Link} to={`/${data.nick}`}>
+    {data.nick}
+    {data && Object.entries(withoutMeta(data)).map(([k, v]) => {
       const content = v instanceof Array ? `${v.length} ${k}` : k
       return (
         <Popup
@@ -44,16 +42,16 @@ const User = ({
       )
     })}
   </Menu.Item>
-)
-interface Controls {
+))
+
+export default function Controls({ selectedNick, changeUser }: {
   selectedNick: string;
   changeUser: (user: string) => void;
-}
-export default function Controls({ selectedNick, changeUser }: Controls) {
+}) {
+  const { data, loading } = useSelector((state: RootState) => state.ricedb)
   const [input, inputChanged] = useState('')
   const [selectedCategories, categoriesChanged] = useState<string[]>([])
   const inputRef = useRef<Input>(null)
-  const { data, loading } = useSelector((state: RootState) => state.ricedb)
   const userList = useSelector(userListSelector)
   const categories = useSelector(categoriesSelector)
   const dispatch = useDispatch()
@@ -64,17 +62,21 @@ export default function Controls({ selectedNick, changeUser }: Controls) {
     }
   }, [dispatch, data])
 
-  let list = userList
-  if (input !== '') {
-    list = list.filter(n => Contains(input, n))
-  }
-  if (selectedCategories.length > 0) {
-    list = list.filter(n => selectedCategories.every(c => data && has(c, data[n])))
-  }
+  const list = userList.filter(({ nick, ...userData }) => {
+    if (input !== '' && ! Contains(input, nick)) {
+      return false
+    }
+    if (selectedCategories.length > 0
+      && ! selectedCategories.every(c => data && has(c, userData))) {
+      return false
+    }
+    return true
+  })
+    .sort(descend(x => x.last_seen))
 
   useEffect(() => {
-    if (list.length === 1 && selectedNick !== list[0]) {
-      changeUser(list[0])
+    if (list.length === 1 && selectedNick !== list[0].nick) {
+      changeUser(list[0].nick)
     }
   }, [list, changeUser, selectedNick])
 
@@ -89,7 +91,7 @@ export default function Controls({ selectedNick, changeUser }: Controls) {
         onChange={(_, { value }) => inputChanged(value)}
         onKeyPress={(e: KeyboardEvent<Input>) => {
           if (e.key === 'Enter') {
-            changeUser(list[0])
+            changeUser(list[0].nick)
           }
         }}
         placeholder="Search"
@@ -115,13 +117,12 @@ export default function Controls({ selectedNick, changeUser }: Controls) {
           }
         }}
       />
-      <Menu vertical fluid secondarvaluey className="nicklist">
-        {data && list.map(n => (
+      <Menu vertical fluid className="nicklist">
+        {data && list.map(userData => (
           <User
-            key={n}
+            key={userData.nick}
             active={selectedNick}
-            nick={n}
-            data={data[n]}
+            data={userData}
           />
         ))}
       </Menu>
