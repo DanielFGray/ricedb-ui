@@ -3,14 +3,18 @@ import ago from 's-ago'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
 
-function makeEmbeddable(x: string): string | JSX.Element | (string | JSX.Element)[] {
+function makeEmbeddable(x: string, i?: number): JSX.Element {
   if (x.includes(' ')) {
-    return x.split(' ').flatMap(makeEmbeddable).join(' ')
+    return (
+      <>
+        {x.split(' ').flatMap(makeEmbeddable)}
+      </>
+    )
   }
-  if (/^https?:\/\/.*\.(png|jpe?g|gif)$/.test(x)) {
+  if (/^https?:\/\/.*\.(png|jpe?g|gif)$/i.test(x)) {
     return (
       <a
-        key={x}
+        key={x.concat(String(i ?? ''))}
         href={x}
         target="__blank"
         rel="noopener noreferrer"
@@ -20,17 +24,21 @@ function makeEmbeddable(x: string): string | JSX.Element | (string | JSX.Element
       </a>
     )
   }
-  if (/^https?:\/\/.*\.(mp4|webm)$/.test(x)) {
+  if (/^https?:\/\/.*\.(mp4|webm)$/i.test(x)) {
     return (
-      <video key={x} width="75%" autoPlay controls muted loop>
+      <video key={x.concat(String(i ?? ''))} width="75%" autoPlay controls muted loop>
         <source src={x} type={`video/${x.match(/\.(\w+)$/g)?.pop()}`} />
       </video>
     )
   }
   if (/^https?:\/\//.test(x)) {
-    return <a key={x} href={x}>{x}</a>
+    return (
+      <a href={x} key={x.concat(String(i ?? ''))} target="__blank" rel="noopener noreferrer">
+        {x}
+      </a>
+    )
   }
-  return x
+  return <>{x}</>
 }
 
 function niceDate(label: string, timestamp?: number) {
