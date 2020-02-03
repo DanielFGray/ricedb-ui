@@ -4,8 +4,8 @@ import {
   configureStore,
   combineReducers,
 } from '@reduxjs/toolkit'
-import { withoutTimes } from './utils'
-import { RiceDbEntry, RiceDb } from './react-app-env.d'
+import { withoutMeta } from './utils'
+import { RiceDb } from './react-app-env.d'
 
 /* eslint-disable no-param-reassign */
 export const remoteSlice = createSlice({
@@ -46,13 +46,13 @@ const selectData = (state: RootState) => state.ricedb.data
 
 export const userListSelector = createSelector([selectData], data => {
   if (! data) return []
-  return Object.keys(data)
-    .filter(nick => Object.entries(withoutTimes(data[nick])).length > 0)
+  return data
+    .filter(x => Object.keys(withoutMeta(x)).length > 0)
 })
 
 export const categoriesSelector = createSelector([selectData], data => {
   if (! data) return []
-  const withDupes = Object.values(data).flatMap((c: RiceDbEntry) => Object.keys(withoutTimes(c)))
+  const withDupes = data.flatMap(c => Object.keys(withoutMeta(c)))
   return Array.from(new Set(withDupes))
     .map(key => ({ key, value: key, text: key }))
 })
@@ -62,7 +62,7 @@ export const fetchData = () => async (dispatch: AppDispatch) => {
   try {
     const res = await fetch('https://ricedb.api.revthefox.co.uk/')
     const json = await res.json()
-    if (typeof json !== 'object') throw new Error('unrecognized response, not an object')
+    if (! (json instanceof Array)) throw new Error('unrecognized response, not an array')
     dispatch(remoteSlice.actions.fetchResolved(json))
   } catch (e) {
     dispatch(remoteSlice.actions.fetchFailed(e))

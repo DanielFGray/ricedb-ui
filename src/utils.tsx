@@ -1,7 +1,13 @@
 import React from 'react'
 import { RiceDbEntry } from './react-app-env.d'
 
-export const withoutTimes = ({ last_seen: _l, deadsince: _d, ...x }: RiceDbEntry) => x
+export const withoutMeta = ({
+  last_seen: _l,
+  deadsince: _d,
+  nick: _n,
+  ...x
+}: RiceDbEntry): Omit<RiceDbEntry, 'nick' | 'last_seen' | 'deadsince'> => x
+
 export const Contains = (a: string, b: string) => b.toLowerCase().includes(a.toLowerCase())
 
 type token = {

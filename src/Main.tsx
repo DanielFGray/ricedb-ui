@@ -6,8 +6,8 @@ import { RootState } from './store'
 import Controls from './Controls'
 import Display from './Display'
 
-export default function Main({ match, history }: RouteComponentProps<{ name: string }>) {
-  const error = useSelector((state: RootState) => state.ricedb.error)
+export default function Main({ match, history }: RouteComponentProps<{ name?: string }>) {
+  const { error, loading } = useSelector((state: RootState) => state.ricedb)
   const name = match.params.name ?? ''
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function Main({ match, history }: RouteComponentProps<{ name: str
       )}
       <div className="wrapper">
         <Controls selectedNick={name} changeUser={changeUser} />
-        <Display selectedNick={name} />
+        <Display selectedNick={name} loading={loading} />
       </div>
     </>
   )
