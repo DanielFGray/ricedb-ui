@@ -1,4 +1,5 @@
 import React from 'react'
+import { Loader } from 'semantic-ui-react'
 import ago from 's-ago'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
@@ -43,7 +44,10 @@ function niceDate(label: string, timestamp?: number) {
 }
 
 
-export default function Display({ selectedNick }: { selectedNick: string }) {
+export default function Display({ selectedNick, loading }: {
+  selectedNick: string;
+  loading: boolean;
+}) {
   const data = useSelector((state: RootState) => state.ricedb.data)
   const { deadsince, last_seen: lastSeen, nick: _n, ...userData } = data
     ?.find(x => selectedNick === x.nick) || {}
@@ -54,16 +58,18 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
         {niceDate('last seen', lastSeen)}
         {niceDate('dead since', deadsince)}
       </div>
-      {Object.entries(userData).map(([k, v]) => (
-        <div className={`entry ${k}`} key={k}>
-          <h2>{k}</h2>
-          <ul>
-            {v instanceof Array ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
-            : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
-            : v}
-          </ul>
-        </div>
-      ))}
+      {loading
+        ? <>Loading...<Loader active inline="centered" /></>
+        : Object.entries(userData).map(([k, v]) => (
+          <div className={`entry ${k}`} key={k}>
+            <h2>{k}</h2>
+            <ul>
+              {v instanceof Array ? v.map(x => <li key={x}>{makeEmbeddable(x)}</li>)
+              : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
+              : v}
+            </ul>
+          </div>
+        ))}
     </div>
   )
 }
