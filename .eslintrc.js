@@ -1,3 +1,4 @@
+const extensions = ['.ts', '.tsx', '.js', '.jsx']
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
@@ -25,13 +26,14 @@ module.exports = {
       pragma: 'React',
       version: 'detect',
     },
+    'import/extensions': extensions,
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx', '.js'],
+      '@typescript-eslint/parser': extensions,
     },
     'import/resolver': {
-      // typescript: {
-      //   alwaysTryTypes: true,
-      // },
+      node: {
+        extensions,
+      }
     },
   },
   parserOptions: {
@@ -42,6 +44,7 @@ module.exports = {
     indent: ['error', 2, { flatTernaryExpressions: true }],
     'no-unexpected-multiline': 'error',
     'no-nested-ternary': 'off',
+    'no-unused-vars': "off",
     'arrow-parens': ['error', 'as-needed'],
     'space-unary-ops': ['error', { overrides: { '!': true } }],
     'object-curly-newline': 'off',
@@ -52,7 +55,14 @@ module.exports = {
     'valid-jsdoc': 'warn',
     'react/jsx-filename-extension': ['error', { extensions: ['.tsx', '.jsx'] }],
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/ban-ts-ignore': 'warn',
+    '@typescript-eslint/require-await': 'warn',
+    'import/extensions': ['error', 'ignorePackages', {
+      'ts': 'never',
+      'tsx': 'never',
+      'js': 'never',
+      'jsx': 'never',
+    }],
   },
 }

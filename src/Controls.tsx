@@ -59,7 +59,7 @@ export default function Controls({ selectedNick, changeUser }: Controls) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!data) {
+    if (! data) {
       dispatch(fetchData())
     }
   }, [dispatch, data])

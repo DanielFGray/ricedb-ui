@@ -4,7 +4,6 @@ import {
   configureStore,
   combineReducers,
 } from '@reduxjs/toolkit'
-import { descend } from 'ramda'
 import { withoutTimes } from './utils'
 import { RiceDbEntry, RiceDb } from './react-app-env.d'
 
@@ -49,7 +48,6 @@ export const userListSelector = createSelector([selectData], data => {
   if (! data) return []
   return Object.keys(data)
     .filter(nick => Object.entries(withoutTimes(data[nick])).length > 0)
-    .sort(descend(x => data[x].last_seen))
 })
 
 export const categoriesSelector = createSelector([selectData], data => {
