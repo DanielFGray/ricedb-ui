@@ -1,9 +1,5 @@
-import {
-  createSelector,
-  createSlice,
-  configureStore,
-  combineReducers,
-} from '@reduxjs/toolkit'
+import { createSelector, createSlice, configureStore, combineReducers } from '@reduxjs/toolkit'
+import { has } from 'ramda'
 import { withoutMeta } from './utils'
 import { RiceDb } from './react-app-env.d'
 
@@ -21,7 +17,6 @@ export const remoteSlice = createSlice({
     },
     fetchResolved(state, action: { payload: RiceDb }) {
       state.loading = false
-      // normalize
       state.data = action.payload
     },
     fetchFailed(state, action: { payload: Error }) {
@@ -46,23 +41,32 @@ const selectData = (state: RootState) => state.ricedb.data
 
 export const userListSelector = createSelector([selectData], data => {
   if (! data) return []
-  return data
-    .filter(x => Object.keys(withoutMeta(x)).length > 0)
+  return data.filter(x => Object.keys(withoutMeta(x)).length > 0)
 })
 
 export const categoriesSelector = createSelector([selectData], data => {
   if (! data) return []
   const withDupes = data.flatMap(c => Object.keys(withoutMeta(c)))
-  return Array.from(new Set(withDupes))
-    .map(key => ({ key, value: key, text: key }))
+  return Array.from(new Set(withDupes)).map(key => ({ key, value: key, text: key }))
 })
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function assert(condition: boolean, message?: string): asserts condition {
+  if (condition !== true) throw new Error(message)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function assertValid(input: any): asserts input is RiceDb {
+  assert(input instanceof Array, 'response not an array')
+  assert(input.every(has('nick')), 'every row does not have a nick')
+}
 
 export const fetchData = () => async (dispatch: AppDispatch) => {
   dispatch(remoteSlice.actions.fetchStarted())
   try {
     const res = await fetch('https://ricedb.api.revthefox.co.uk/')
     const json = await res.json()
-    if (! (json instanceof Array)) throw new Error('unrecognized response, not an array')
+    assertValid(json)
     dispatch(remoteSlice.actions.fetchResolved(json))
   } catch (e) {
     dispatch(remoteSlice.actions.fetchFailed(e))

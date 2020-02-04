@@ -28,13 +28,11 @@ function lookup(k) {
 }
 
 export default function Iconify({ icon, ...x }) {
-  return (
-    <FontAwesomeIcon i={lookup(icon)} {...x} />
-  )
+  return <FontAwesomeIcon i={lookup(icon)} {...x} />
 }
 
 export const FontAwesomeIcon = React.memo(({ i, size, className = '', ...props }) => {
-  if (! i) return null
+  if (!i) return null
 
   const {
     icon: [width, height, , , svgPathData],

@@ -8,22 +8,20 @@ html {
 
 body {
   margin: 1em;
+  height: 100%;
 }
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
-    "list content content";
+    "controls content content content";
 }
 
-.userlist {
-  grid-area: list;
-}
-
-.nicklist {
-  overflow-y: auto;
-  height: 75vh;
+.controls {
+  grid-area: controls;
+  position: fixed;
+  width: 25%;
 }
 
 .displayarea {
@@ -33,7 +31,6 @@ body {
 }
 
 .displayarea ul {
-  list-style: none;
   padding: 0;
   margin: 0.5em;
 }
@@ -43,7 +40,32 @@ body {
   margin: 0;
 }
 
+.displayarea .list img,
+.displayarea .list video {
+  max-width: 50vw;
+}
 
-.label svg {
-  height: 1.25em;
+.displayarea .grid img,
+.displayarea .grid video {
+  max-width: 275px;
+  max-height: 275px;
+}
+
+.displayarea .entry.homescreens ul,
+.displayarea .entry.selfies ul,
+.displayarea .entry.pets ul,
+.displayarea .entry.handwritings ul,
+.displayarea .entry.stations ul,
+.displayarea .entry.dtops ul {
+  list-style: none;
+}
+
+.displayarea .grid .entry.homescreens ul,
+.displayarea .grid .entry.selfies ul,
+.displayarea .grid .entry.pets ul,
+.displayarea .grid .entry.handwritings ul,
+.displayarea .grid .entry.stations ul,
+.displayarea .grid .entry.dtops ul {
+  display: flex;
+  flex-wrap: wrap;
 }
