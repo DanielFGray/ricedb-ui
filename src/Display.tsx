@@ -13,7 +13,6 @@ function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
         href={x}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={e => e.preventDefault()}
       >
         <img src={x} alt={x} />
       </a>
