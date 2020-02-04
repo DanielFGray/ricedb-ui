@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef, KeyboardEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Dropdown, Input, Label, Popup, Menu } from 'semantic-ui-react'
+import { Dropdown, Input, Menu } from 'semantic-ui-react'
 import { FixedSizeList as List } from 'react-window'
 import { has } from 'ramda'
 import { userListSelector, RootState, categoriesSelector, fetchData } from './store'
-import { withoutMeta, Contains } from './utils'
-import Iconify from './Iconify'
-import { RiceDbEntry } from './react-app-env.d'
+import { Contains } from './utils'
 
 export default function Controls({
   selectedNick,
