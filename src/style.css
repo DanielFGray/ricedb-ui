@@ -8,22 +8,18 @@ html {
 
 body {
   margin: 1em;
+  height: 100%;
 }
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
-    "list content content";
+    "list content content content";
 }
 
 .userlist {
   grid-area: list;
-}
-
-.nicklist {
-  overflow-y: auto;
-  height: 75vh;
 }
 
 .displayarea {

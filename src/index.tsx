@@ -18,7 +18,6 @@ const Init = () => (
   </Provider>
 )
 
-
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Init />, document.getElementById('root'))
 })
