@@ -50,12 +50,24 @@ export const categoriesSelector = createSelector([selectData], data => {
   return Array.from(new Set(withDupes)).map(key => ({ key, value: key, text: key }))
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function assert(condition: boolean, message?: string): asserts condition {
+  if (condition !== true) throw new Error(message)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function assertValid(input: any): asserts input is RiceDb {
+  assert(input instanceof Array, 'response not an array')
+  assert(input.every(has('nick')), 'every row does not have a nick')
+  console.log(input)
+}
+
 export const fetchData = () => async (dispatch: AppDispatch) => {
   dispatch(remoteSlice.actions.fetchStarted())
   try {
     const res = await fetch('https://ricedb.api.revthefox.co.uk/')
     const json = await res.json()
-    if (! (json instanceof Array)) throw new Error('unrecognized response, not an array')
+    assertValid(json)
     dispatch(remoteSlice.actions.fetchResolved(json))
   } catch (e) {
     dispatch(remoteSlice.actions.fetchFailed(e))
