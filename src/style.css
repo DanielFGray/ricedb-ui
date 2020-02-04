@@ -39,7 +39,16 @@ body {
   margin: 0;
 }
 
+.displayarea .list img,
+.displayarea .list video {
+  max-width: 50vw;
+}
 
-.label svg {
-  height: 1.25em;
+.displayarea .grid img,
+.displayarea .grid video {
+  max-width: 100px;
+  max-height: 100px;
+}
+.displayarea .grid ul {
+  display: flex;
 }

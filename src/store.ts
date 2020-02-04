@@ -59,7 +59,6 @@ function assert(condition: boolean, message?: string): asserts condition {
 function assertValid(input: any): asserts input is RiceDb {
   assert(input instanceof Array, 'response not an array')
   assert(input.every(has('nick')), 'every row does not have a nick')
-  console.log(input)
 }
 
 export const fetchData = () => async (dispatch: AppDispatch) => {
