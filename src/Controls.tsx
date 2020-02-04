@@ -53,7 +53,7 @@ export default function Controls({
   useEffect(() => inputRef.current?.focus(), [])
 
   return (
-    <div className="userlist">
+    <div className="controls">
       <Input
         value={input}
         ref={inputRef}
