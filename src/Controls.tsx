@@ -115,7 +115,7 @@ export default function Controls({
         clearable
         fluid
       />
-      <div className="searchParams">
+      <form className="searchParams">
         search:
         {' '}
         <input
@@ -135,7 +135,7 @@ export default function Controls({
         />
         {' '}
         <label htmlFor="distrosearchcontrol">distros</label>
-      </div>
+      </form>
       <Dropdown
         fluid
         multiple
@@ -154,7 +154,7 @@ export default function Controls({
           }
         }}
       />
-      <Menu className="nicklist">
+      <Menu className="nicklist" vertical fluid>
         <List
           itemCount={list?.length ?? 0}
           itemSize={40}

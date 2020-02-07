@@ -79,7 +79,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
         {niceDate('dead since', deadsince)}
         {data && selectedNick && (
           <>
-            <div>
+            <form className="searchParams">
               <input
                 type="radio"
                 checked={viewMode === 'grid'}
@@ -111,7 +111,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
                 </>
               )
             }
-            </div>
+            </form>
           </>
         )}
       </div>

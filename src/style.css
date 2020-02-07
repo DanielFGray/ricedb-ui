@@ -67,6 +67,10 @@ body {
   justify-content: center;
 }
 
-.controls .searchParams {
+.searchParams {
   padding: 0.5em 0;
+}
+
+.searchParams input {
+  vertical-align: middle;
 }
