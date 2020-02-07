@@ -6,16 +6,20 @@ import Main from './Main'
 import { store } from './store'
 import 'semantic-ui-css/semantic.min.css'
 import './style.css'
+import ErrorBoundary from './ErrorBoundary'
+import Stringify from './Stringify'
 
 const Init = () => (
-  <Provider store={store}>
-    <Router>
-      <Switch>
-        <Route path="/:nick" component={Main} />
-        <Route path="/" component={Main} />
-      </Switch>
-    </Router>
-  </Provider>
+  <ErrorBoundary onError={Stringify}>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route path="/:nick" component={Main} />
+          <Route path="/" component={Main} />
+        </Switch>
+      </Router>
+    </Provider>
+  </ErrorBoundary>
 )
 
 

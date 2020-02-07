@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { controls, RootState } from './store'
 import { Linkify } from './utils'
 import { RiceDbEntry } from './react-app-env'
+import Stringify from './Stringify'
+import GitHub from './github'
 
 function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   if (/^https?:\/\/.*\.(png|jpe?g|gif)$/i.test(x)) {
@@ -25,6 +27,16 @@ function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
         <source src={x} type={`video/${x.match(/(\w+)$/g)?.pop()}`} />
       </video>
     )
+  }
+  const ghRe = /^https?:\/\/(www\.)?github.com\/([^/]+)\/?$/
+
+  if (ghRe.test(x)) {
+    const matches = ghRe.exec(x)
+    if (!matches || !matches[2]) {
+      console.log('failed to parse github user')
+      return Linkify(x)
+    }
+    return <GitHub user={matches[2]} />
   }
   return Linkify(x)
 }
