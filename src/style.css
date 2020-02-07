@@ -68,4 +68,5 @@ body {
 .displayarea .grid .entry.dtops ul {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
