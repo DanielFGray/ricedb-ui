@@ -32,8 +32,12 @@ export const controls = createSlice({
     selectedCategories: [] as string[],
     showAll: true,
     viewMode: 'grid' as 'grid' | 'list',
+    searchTarget: 'nick' as 'nick' | 'distro',
   },
   reducers: {
+    searchTargetChanged(state, action) {
+      state.searchTarget = action.payload
+    },
     viewModeChanged(state, action) {
       state.viewMode = action.payload
     },

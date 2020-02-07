@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Loader } from 'semantic-ui-react'
 import ago from 's-ago'
 import { useSelector, useDispatch } from 'react-redux'
@@ -63,7 +63,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
     return list
   }, [selectedCategories, userData, showAll])
 
-  if (!selectedNick) {
+  if (! selectedNick) {
     return (
       <div className="displayarea">
         hint: use left/right arrow keys

@@ -21,7 +21,10 @@ export default function Controls({
   changeUser: (user: string) => void;
 }) {
   const { data, loading } = useSelector((state: RootState) => state.ricedb)
-  const selectedCategories = useSelector((state: RootState) => state.controls.selectedCategories)
+  const {
+    selectedCategories,
+    searchTarget,
+  } = useSelector((state: RootState) => state.controls)
   const [input, inputChanged] = useState('')
   const inputRef = useRef<Input>(null)
   const userList = useSelector(userListSelector)
@@ -36,8 +39,15 @@ export default function Controls({
 
   const list = userList
     .filter(({ nick, ...userData }) => {
-      if (input !== '' && ! Contains(input, nick)) {
-        return false
+      if (input !== '') {
+        switch (searchTarget) {
+        case 'nick':
+          if (!Contains(input, nick)) return false
+          break
+        case 'distro':
+            if (!(userData.distros && userData.distros.some(d => Contains(input, d)))) return false
+          break
+        }
       }
       if (
         selectedCategories.length > 0
@@ -105,6 +115,27 @@ export default function Controls({
         clearable
         fluid
       />
+      <div className="searchParams">
+        search:
+        {' '}
+        <input
+          type="radio"
+          checked={searchTarget === 'nick'}
+          id="nicksearchcontrol"
+          onChange={() => dispatch(controls.actions.searchTargetChanged('nick'))}
+        />
+        {' '}
+        <label htmlFor="nicksearchcontrol">nick</label>
+        {' '}
+        <input
+          type="radio"
+          checked={searchTarget === 'distro'}
+          id="distrosearchcontrol"
+          onChange={() => dispatch(controls.actions.searchTargetChanged('distro'))}
+        />
+        {' '}
+        <label htmlFor="distrosearchcontrol">distros</label>
+      </div>
       <Dropdown
         fluid
         multiple
