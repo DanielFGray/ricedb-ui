@@ -4,18 +4,14 @@ import { withoutMeta } from './utils'
 import { RiceDb } from './react-app-env.d'
 
 /* eslint-disable no-param-reassign */
-export const remoteSlice = createSlice({
+export const remoteData = createSlice({
   name: 'ricedb',
   initialState: {
-    selectedCategories: [] as string[],
     data: null as RiceDb | null,
     loading: false,
     error: null as Error | null,
   },
   reducers: {
-    categoriesChanged(state, action: { payload: string[] }) {
-      state.selectedCategories = action.payload
-    },
     fetchStarted(state) {
       state.loading = true
     },
@@ -29,12 +25,38 @@ export const remoteSlice = createSlice({
     },
   },
 })
+
+export const controls = createSlice({
+  name: 'controls',
+  initialState: {
+    selectedCategories: [] as string[],
+    showAll: true,
+    viewMode: 'grid' as 'grid' | 'list',
+    searchTarget: 'nick' as 'nick' | 'distro',
+  },
+  reducers: {
+    searchTargetChanged(state, action) {
+      state.searchTarget = action.payload
+    },
+    viewModeChanged(state, action) {
+      state.viewMode = action.payload
+    },
+    showAllChanged(state) {
+      state.showAll = ! state.showAll
+    },
+    categoriesChanged(state, action: { payload: string[] }) {
+      if (action.payload.length === 0 && state.showAll === false) {
+        state.showAll = true
+      }
+      state.selectedCategories = action.payload
+    },
+  },
+})
 /* eslint-enable no-param-reassign */
 
-export const { actions } = remoteSlice
-
 export const reducer = combineReducers({
-  ricedb: remoteSlice.reducer,
+  ricedb: remoteData.reducer,
+  controls: controls.reducer,
 })
 export type RootState = ReturnType<typeof reducer>
 
@@ -68,14 +90,14 @@ function assertValid(input: any): asserts input is RiceDb {
 }
 
 export const fetchData = () => async (dispatch: AppDispatch) => {
-  dispatch(actions.fetchStarted())
+  dispatch(remoteData.actions.fetchStarted())
   try {
     const res = await fetch('https://ricedb.api.revthefox.co.uk/')
     const json = await res.json()
     assertValid(json)
-    dispatch(actions.fetchResolved(json))
+    dispatch(remoteData.actions.fetchResolved(json))
   } catch (e) {
-    dispatch(actions.fetchFailed(e))
+    dispatch(remoteData.actions.fetchFailed(e))
   }
 }
 

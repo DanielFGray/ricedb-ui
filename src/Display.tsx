@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import { Loader } from 'semantic-ui-react'
 import ago from 's-ago'
-import { useSelector } from 'react-redux'
-import { RootState } from './store'
+import { useSelector, useDispatch } from 'react-redux'
+import { controls, RootState } from './store'
 import { Linkify } from './utils'
+import { RiceDbEntry } from './react-app-env'
 
 function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   if (/^https?:\/\/.*\.(png|jpe?g|gif)$/i.test(x)) {
@@ -20,8 +21,8 @@ function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   }
   if (/^https?:\/\/.*\.(mp4|webm)$/i.test(x)) {
     return (
-      <video key={x} width="75%" autoPlay controls muted loop>
-        <source src={x} type={`video/${x.match(/\.(\w+)$/g)?.pop()}`} />
+      <video key={x} width="75%" autoPlay={false} controls muted loop>
+        <source src={x} type={`video/${x.match(/(\w+)$/g)?.pop()}`} />
       </video>
     )
   }
@@ -43,43 +44,74 @@ function niceDate(label: string, timestamp?: number) {
 }
 
 
-export default function Display({ selectedNick, loading }: {
-  selectedNick: string;
-  loading: boolean;
-}) {
-  const [viewMode, setViewMode] = useState('grid')
-  const [showAll, setShowAll] = useState(true)
-  const data = useSelector((state: RootState) => state.ricedb.data)
-  const selectedCategories = useSelector((state: RootState) => state.ricedb.selectedCategories)
+export default function Display({ selectedNick }: { selectedNick: string }) {
+  const { data, loading } = useSelector((state: RootState) => state.ricedb)
+  const {
+    viewMode,
+    showAll,
+    selectedCategories,
+  } = useSelector((state: RootState) => state.controls)
   const { deadsince, last_seen: lastSeen, nick: _n, ...userData } = data
-    ?.find(x => selectedNick === x.nick) || {}
+    ?.find((x: RiceDbEntry) => selectedNick === x.nick) || {}
+  const dispatch = useDispatch()
 
-  let displayList = Object.entries(userData)
-  if (! showAll) {
-    displayList = displayList.filter(([k]) => selectedCategories.includes(k))
+  const displayList = useMemo(() => {
+    let list = Object.entries(userData)
+    if (! showAll) {
+      list = list.filter(([k]) => selectedCategories.includes(k))
+    }
+    return list
+  }, [selectedCategories, userData, showAll])
+
+  if (! selectedNick) {
+    return (
+      <div className="displayarea">
+        hint: use left/right arrow keys
+      </div>
+    )
   }
 
   return (
-    <div className="displayarea">
+    <div className={`displayarea ${viewMode}`}>
       <div>
         <h1>{selectedNick}</h1>
         {niceDate('last seen', lastSeen)}
         {niceDate('dead since', deadsince)}
         {data && selectedNick && (
           <>
-            <div>
-              <input type="radio" checked={viewMode === 'grid'} id="gridviewcontrol" onChange={() => setViewMode('grid')} />
+            <form className="searchParams">
+              <input
+                type="radio"
+                checked={viewMode === 'grid'}
+                id="gridviewcontrol"
+                onChange={() => dispatch(controls.actions.viewModeChanged('grid'))}
+              />
               {' '}
               <label htmlFor="gridviewcontrol">grid view</label>
               {' '}
-              <input type="radio" checked={viewMode === 'list'} id="listviewcontrol" onChange={() => setViewMode('list')} />
+              <input
+                type="radio"
+                checked={viewMode === 'list'}
+                id="listviewcontrol"
+                onChange={() => dispatch(controls.actions.viewModeChanged('list'))}
+              />
               {' '}
               <label htmlFor="listviewcontrol">list view</label>
               {' '}
-              <input type="checkbox" checked={showAll} id="showallviewcontrol" onChange={() => setShowAll(! showAll)} />
-              {' '}
-              <label htmlFor="showallviewcontrol">show all</label>
-            </div>
+              {selectedCategories.length > 0 && (
+                <>
+                  <input
+                    type="checkbox"
+                    checked={showAll}
+                    id="showallviewcontrol"
+                    onChange={() => dispatch(controls.actions.showAllChanged())}
+                  />
+                  {' '}
+                  <label htmlFor="showallviewcontrol">show all</label>
+                </>
+              )
+            }
+            </form>
           </>
         )}
       </div>
@@ -91,18 +123,16 @@ export default function Display({ selectedNick, loading }: {
           </>
         )
         : (
-          <div className={viewMode}>
-            {displayList.map(([k, v]) => (
-              <div className={`entry ${k}`} key={k}>
-                <h2>{k}</h2>
-                <ul>
-                  {v instanceof Array ? v.map((x, i) => <li key={`${x}_${i}`}>{makeEmbeddable(x)}</li>)
-                  : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
-                  : v}
-                </ul>
-              </div>
-            ))}
-          </div>
+          displayList.map(([k, v]) => (
+            <div className={`entry ${k}`} key={k}>
+              <h2>{k}</h2>
+              <ul>
+                {v instanceof Array ? v.map((x, i) => <li key={`${x}_${i}`}>{makeEmbeddable(x)}</li>)
+                : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
+                : v}
+              </ul>
+            </div>
+          ))
         )}
     </div>
   )

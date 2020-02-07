@@ -5,14 +5,14 @@ import { Provider } from 'react-redux'
 import Main from './Main'
 import { store } from './store'
 import 'semantic-ui-css/semantic.min.css'
-import './dist.css'
+import './style.css'
 
 const Init = () => (
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route exact path="/" component={Main} />
-        <Route exact path="/:nick" component={Main} />
+        <Route path="/:nick" component={Main} />
+        <Route path="/" component={Main} />
       </Switch>
     </Router>
   </Provider>
