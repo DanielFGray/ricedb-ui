@@ -107,7 +107,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
                     onChange={() => dispatch(controls.actions.showAllChanged())}
                   />
                   {' '}
-                  <label htmlFor="showallviewcontrol">show all</label>
+                  <label htmlFor="showallviewcontrol">show all categories</label>
                 </>
               )
             }
