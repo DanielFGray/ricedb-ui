@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Loader } from 'semantic-ui-react'
 import ago from 's-ago'
 import { useSelector } from 'react-redux'
@@ -58,6 +58,12 @@ export default function Display({ selectedNick, loading }: {
   if (! showAll) {
     displayList = displayList.filter(([k]) => selectedCategories.includes(k))
   }
+
+  useEffect(() => {
+    if (selectedCategories.length === 0 && showAll === false) {
+      setShowAll(true)
+    }
+  }, [showAll, selectedCategories])
 
   return (
     <div className={`displayarea ${viewMode}`}>
