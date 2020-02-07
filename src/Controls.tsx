@@ -4,7 +4,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Dropdown, Input, Menu } from 'semantic-ui-react'
 import { FixedSizeList as List } from 'react-window'
 import { has } from 'ramda'
-import { userListSelector, actions, RootState, categoriesSelector, fetchData } from './store'
+import {
+  userListSelector,
+  controls,
+  RootState,
+  categoriesSelector,
+  fetchData,
+} from './store'
 import { Contains } from './utils'
 
 export default function Controls({
@@ -14,7 +20,8 @@ export default function Controls({
   selectedNick: string;
   changeUser: (user: string) => void;
 }) {
-  const { selectedCategories, data, loading } = useSelector((state: RootState) => state.ricedb)
+  const { data, loading } = useSelector((state: RootState) => state.ricedb)
+  const selectedCategories = useSelector((state: RootState) => state.controls.selectedCategories)
   const [input, inputChanged] = useState('')
   const inputRef = useRef<Input>(null)
   const userList = useSelector(userListSelector)
@@ -57,7 +64,6 @@ export default function Controls({
     function handler(e: any) {
       const leftArrowCode = 39
       const rightArrowCode = 37
-      console.log({ userIdx })
       if (! (list && userIdx > -1)) return
       let idx
       switch (e.keyCode) {
@@ -111,9 +117,9 @@ export default function Controls({
         value={selectedCategories}
         onChange={(_, { value }) => {
           if (value == null) {
-            dispatch(actions.categoriesChanged([]))
+            dispatch(controls.actions.categoriesChanged([]))
           } else {
-            dispatch(actions.categoriesChanged(value as string[]))
+            dispatch(controls.actions.categoriesChanged(value as string[]))
           }
         }}
       />

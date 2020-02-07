@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Loader } from 'semantic-ui-react'
 import ago from 's-ago'
-import { useSelector } from 'react-redux'
-import { RootState } from './store'
+import { useSelector, useDispatch } from 'react-redux'
+import { controls, RootState } from './store'
 import { Linkify } from './utils'
+import { RiceDbEntry } from './react-app-env'
 
 function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   if (/^https?:\/\/.*\.(png|jpe?g|gif)$/i.test(x)) {
@@ -43,27 +44,24 @@ function niceDate(label: string, timestamp?: number) {
 }
 
 
-export default function Display({ selectedNick, loading }: {
-  selectedNick: string;
-  loading: boolean;
-}) {
-  const [viewMode, setViewMode] = useState('grid')
-  const [showAll, setShowAll] = useState(true)
-  const data = useSelector((state: RootState) => state.ricedb.data)
-  const selectedCategories = useSelector((state: RootState) => state.ricedb.selectedCategories)
+export default function Display({ selectedNick }: { selectedNick: string }) {
+  const { data, loading } = useSelector((state: RootState) => state.ricedb)
+  const {
+    viewMode,
+    showAll,
+    selectedCategories,
+  } = useSelector((state: RootState) => state.controls)
   const { deadsince, last_seen: lastSeen, nick: _n, ...userData } = data
-    ?.find(x => selectedNick === x.nick) || {}
+    ?.find((x: RiceDbEntry) => selectedNick === x.nick) || {}
+  const dispatch = useDispatch()
 
-  let displayList = Object.entries(userData)
-  if (! showAll) {
-    displayList = displayList.filter(([k]) => selectedCategories.includes(k))
-  }
-
-  useEffect(() => {
-    if (selectedCategories.length === 0 && showAll === false) {
-      setShowAll(true)
+  const displayList = useMemo(() => {
+    let list = Object.entries(userData)
+    if (! showAll) {
+      list = list.filter(([k]) => selectedCategories.includes(k))
     }
-  }, [showAll, selectedCategories])
+    return list
+  }, [selectedCategories, userData, showAll])
 
   return (
     <div className={`displayarea ${viewMode}`}>
@@ -74,17 +72,32 @@ export default function Display({ selectedNick, loading }: {
         {data && selectedNick && (
           <>
             <div>
-              <input type="radio" checked={viewMode === 'grid'} id="gridviewcontrol" onChange={() => setViewMode('grid')} />
+              <input
+                type="radio"
+                checked={viewMode === 'grid'}
+                id="gridviewcontrol"
+                onChange={() => dispatch(controls.actions.viewModeChanged('grid'))}
+              />
               {' '}
               <label htmlFor="gridviewcontrol">grid view</label>
               {' '}
-              <input type="radio" checked={viewMode === 'list'} id="listviewcontrol" onChange={() => setViewMode('list')} />
+              <input
+                type="radio"
+                checked={viewMode === 'list'}
+                id="listviewcontrol"
+                onChange={() => dispatch(controls.actions.viewModeChanged('list'))}
+              />
               {' '}
               <label htmlFor="listviewcontrol">list view</label>
               {' '}
               {selectedCategories.length > 0 && (
                 <>
-                  <input type="checkbox" checked={showAll} id="showallviewcontrol" onChange={() => setShowAll(! showAll)} />
+                  <input
+                    type="checkbox"
+                    checked={showAll}
+                    id="showallviewcontrol"
+                    onChange={() => dispatch(controls.actions.showAllChanged())}
+                  />
                   {' '}
                   <label htmlFor="showallviewcontrol">show all</label>
                 </>

@@ -7,7 +7,7 @@ import Controls from './Controls'
 import Display from './Display'
 
 export default function Main({ match, history }: RouteComponentProps<{ nick?: string }>) {
-  const { error, loading } = useSelector((state: RootState) => state.ricedb)
+  const { error } = useSelector((state: RootState) => state.ricedb)
   const name = match.params.nick ?? ''
 
   const changeUser = useCallback((user: string) => {
@@ -26,7 +26,7 @@ export default function Main({ match, history }: RouteComponentProps<{ nick?: st
       )}
       <div className="wrapper">
         <Controls selectedNick={name} changeUser={changeUser} />
-        <Display selectedNick={name} loading={loading} />
+        <Display selectedNick={name} />
       </div>
     </>
   )
