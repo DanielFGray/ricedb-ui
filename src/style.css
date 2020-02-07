@@ -56,17 +56,15 @@ body {
   list-style: none;
 }
 
-.displayarea.grid ul {
+.displayarea .entry.dtops ul,
+.displayarea .entry.stations ul,
+.displayarea .entry.selfies ul,
+.displayarea .entry.homescreens ul,
+.displayarea .entry.handwritings ul,
+.displayarea .entry.pets ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.displayarea.grid .entry.dotfiles ul,
-.displayarea.grid .entry.websites ul,
-.displayarea.grid .entry.distros ul {
-  list-style-type: circle;
-  display: block;
 }
 
 .controls .searchParams {

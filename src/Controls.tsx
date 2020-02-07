@@ -159,7 +159,7 @@ export default function Controls({
           itemCount={list?.length ?? 0}
           itemSize={40}
           width="100%"
-          height={window.screen.availHeight - 185}
+          height={window.screen.availHeight - 210}
         >
           {({ style, index }) => {
             if (! data) return null
