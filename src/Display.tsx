@@ -21,8 +21,8 @@ function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   }
   if (/^https?:\/\/.*\.(mp4|webm)$/i.test(x)) {
     return (
-      <video key={x} width="75%" autoPlay controls muted loop>
-        <source src={x} type={`video/${x.match(/\.(\w+)$/g)?.pop()}`} />
+      <video key={x} width="75%" autoPlay={false} controls muted loop>
+        <source src={x} type={`video/${x.match(/(\w+)$/g)?.pop()}`} />
       </video>
     )
   }
