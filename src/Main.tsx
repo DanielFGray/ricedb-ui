@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { Message, Icon } from 'semantic-ui-react'
 import { useSelector } from 'react-redux'
 import { RouteComponentProps } from 'react-router-dom'
@@ -6,17 +6,15 @@ import { RootState } from './store'
 import Controls from './Controls'
 import Display from './Display'
 
-export default function Main({ match, history }: RouteComponentProps<{ name?: string }>) {
+export default function Main({ match, history }: RouteComponentProps<{ nick?: string }>) {
   const { error, loading } = useSelector((state: RootState) => state.ricedb)
-  const name = match.params.name ?? ''
+  const name = match.params.nick ?? ''
 
-  useEffect(() => {
-    if (error) console.error(error)
-  }, [error])
-
-  const changeUser = (user: string) => {
+  const changeUser = useCallback((user: string) => {
     history.push(`/${user}`)
-  }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (error) console.error(error)
 
   return (
     <>

@@ -7,11 +7,15 @@ import { RiceDb } from './react-app-env.d'
 export const remoteSlice = createSlice({
   name: 'ricedb',
   initialState: {
+    selectedCategories: [] as string[],
     data: null as RiceDb | null,
     loading: false,
     error: null as Error | null,
   },
   reducers: {
+    categoriesChanged(state, action: { payload: string[] }) {
+      state.selectedCategories = action.payload
+    },
     fetchStarted(state) {
       state.loading = true
     },
@@ -26,6 +30,8 @@ export const remoteSlice = createSlice({
   },
 })
 /* eslint-enable no-param-reassign */
+
+export const { actions } = remoteSlice
 
 export const reducer = combineReducers({
   ricedb: remoteSlice.reducer,
@@ -62,14 +68,14 @@ function assertValid(input: any): asserts input is RiceDb {
 }
 
 export const fetchData = () => async (dispatch: AppDispatch) => {
-  dispatch(remoteSlice.actions.fetchStarted())
+  dispatch(actions.fetchStarted())
   try {
     const res = await fetch('https://ricedb.api.revthefox.co.uk/')
     const json = await res.json()
     assertValid(json)
-    dispatch(remoteSlice.actions.fetchResolved(json))
+    dispatch(actions.fetchResolved(json))
   } catch (e) {
-    dispatch(remoteSlice.actions.fetchFailed(e))
+    dispatch(actions.fetchFailed(e))
   }
 }
 

@@ -48,9 +48,17 @@ export default function Display({ selectedNick, loading }: {
   loading: boolean;
 }) {
   const [viewMode, setViewMode] = useState('grid')
+  const [showAll, setShowAll] = useState(true)
   const data = useSelector((state: RootState) => state.ricedb.data)
+  const selectedCategories = useSelector((state: RootState) => state.ricedb.selectedCategories)
   const { deadsince, last_seen: lastSeen, nick: _n, ...userData } = data
     ?.find(x => selectedNick === x.nick) || {}
+
+  let displayList = Object.entries(userData)
+  if (! showAll) {
+    displayList = displayList.filter(([k]) => selectedCategories.includes(k))
+  }
+
   return (
     <div className="displayarea">
       <div>
@@ -60,19 +68,31 @@ export default function Display({ selectedNick, loading }: {
         {data && selectedNick && (
           <>
             <div>
-              <input type="radio" checked={viewMode === 'grid'} id="grid" onChange={() => setViewMode('grid')} /> <label htmlFor="grid">grid view</label>
-            </div>
-            <div>
-              <input type="radio" checked={viewMode === 'list'} id="list" onChange={() => setViewMode('list')} /> <label htmlFor="list">list view</label>
+              <input type="radio" checked={viewMode === 'grid'} id="gridviewcontrol" onChange={() => setViewMode('grid')} />
+              {' '}
+              <label htmlFor="gridviewcontrol">grid view</label>
+              {' '}
+              <input type="radio" checked={viewMode === 'list'} id="listviewcontrol" onChange={() => setViewMode('list')} />
+              {' '}
+              <label htmlFor="listviewcontrol">list view</label>
+              {' '}
+              <input type="checkbox" checked={showAll} id="showallviewcontrol" onChange={() => setShowAll(! showAll)} />
+              {' '}
+              <label htmlFor="showallviewcontrol">show all</label>
             </div>
           </>
         )}
       </div>
       {loading
-        ? <>Loading...<Loader active inline="centered" /></>
+        ? (
+          <>
+            Loading...
+            <Loader active inline="centered" />
+          </>
+        )
         : (
           <div className={viewMode}>
-            {Object.entries(userData).map(([k, v]) => (
+            {displayList.map(([k, v]) => (
               <div className={`entry ${k}`} key={k}>
                 <h2>{k}</h2>
                 <ul>

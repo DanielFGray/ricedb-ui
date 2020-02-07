@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Dropdown, Input, Menu } from 'semantic-ui-react'
 import { FixedSizeList as List } from 'react-window'
 import { has } from 'ramda'
-import { userListSelector, RootState, categoriesSelector, fetchData } from './store'
+import { userListSelector, actions, RootState, categoriesSelector, fetchData } from './store'
 import { Contains } from './utils'
 
 export default function Controls({
@@ -14,9 +14,8 @@ export default function Controls({
   selectedNick: string;
   changeUser: (user: string) => void;
 }) {
-  const { data, loading } = useSelector((state: RootState) => state.ricedb)
+  const { selectedCategories, data, loading } = useSelector((state: RootState) => state.ricedb)
   const [input, inputChanged] = useState('')
-  const [selectedCategories, categoriesChanged] = useState<string[]>([])
   const inputRef = useRef<Input>(null)
   const userList = useSelector(userListSelector)
   const categories = useSelector(categoriesSelector)
@@ -50,6 +49,40 @@ export default function Controls({
 
   useEffect(() => inputRef.current?.focus(), [])
 
+  useEffect(() => {
+    const userIdx = list && selectedNick
+      ? list.findIndex(user => user.nick === selectedNick)
+      : -1
+
+    function handler(e: any) {
+      const leftArrowCode = 39
+      const rightArrowCode = 37
+      console.log({ userIdx })
+      if (! (list && userIdx > -1)) return
+      let idx
+      switch (e.keyCode) {
+      case rightArrowCode:
+        idx = userIdx - 1
+        if (idx < 0) return
+        changeUser(list[idx].nick)
+        break
+      case leftArrowCode:
+        idx = userIdx + 1
+        if (idx < 0) return
+        changeUser(list[idx].nick)
+        break
+      default:
+        break
+      }
+    }
+
+    window.addEventListener('keyup', handler)
+    return () => {
+      window.removeEventListener('keyup', handler)
+    }
+  }, [list, selectedNick, changeUser])
+
+
   return (
     <div className="controls">
       <Input
@@ -78,10 +111,9 @@ export default function Controls({
         value={selectedCategories}
         onChange={(_, { value }) => {
           if (value == null) {
-            categoriesChanged([])
+            dispatch(actions.categoriesChanged([]))
           } else {
-            // @ts-ignore
-            categoriesChanged(value)
+            dispatch(actions.categoriesChanged(value as string[]))
           }
         }}
       />
@@ -96,7 +128,13 @@ export default function Controls({
             if (! data) return null
             const userData = list[index]
             return (
-              <Menu.Item key={userData.nick} as={Link} to={`/${userData.nick}`} style={style}>
+              <Menu.Item
+                key={userData.nick}
+                as={Link}
+                to={`/${userData.nick}`}
+                style={style}
+                active={selectedNick === userData.nick}
+              >
                 {userData.nick}
               </Menu.Item>
             )
