@@ -74,17 +74,17 @@ export default function Controls({
     function handler(e: any) {
       const leftArrowCode = 39
       const rightArrowCode = 37
-      if (! list) return
+      if (! list?.length) return
       let idx
       switch (e.keyCode) {
       case rightArrowCode:
         idx = userIdx - 1
-        if (idx < 0) return
+        if (idx < 0) idx = 0
         changeUser(list[idx].nick)
         break
       case leftArrowCode:
         idx = userIdx + 1
-        if (idx === list.length) idx = 0
+        if (idx >= list.length) idx = 0
         changeUser(list[idx].nick)
         break
       default:
