@@ -60,7 +60,7 @@ export default function Display({ selectedNick, loading }: {
   }
 
   return (
-    <div className="displayarea">
+    <div className={`displayarea ${viewMode}`}>
       <div>
         <h1>{selectedNick}</h1>
         {niceDate('last seen', lastSeen)}
@@ -76,9 +76,14 @@ export default function Display({ selectedNick, loading }: {
               {' '}
               <label htmlFor="listviewcontrol">list view</label>
               {' '}
-              <input type="checkbox" checked={showAll} id="showallviewcontrol" onChange={() => setShowAll(! showAll)} />
-              {' '}
-              <label htmlFor="showallviewcontrol">show all</label>
+              {selectedCategories.length > 0 && (
+                <>
+                  <input type="checkbox" checked={showAll} id="showallviewcontrol" onChange={() => setShowAll(! showAll)} />
+                  {' '}
+                  <label htmlFor="showallviewcontrol">show all</label>
+                </>
+              )
+            }
             </div>
           </>
         )}
@@ -91,18 +96,16 @@ export default function Display({ selectedNick, loading }: {
           </>
         )
         : (
-          <div className={viewMode}>
-            {displayList.map(([k, v]) => (
-              <div className={`entry ${k}`} key={k}>
-                <h2>{k}</h2>
-                <ul>
-                  {v instanceof Array ? v.map((x, i) => <li key={`${x}_${i}`}>{makeEmbeddable(x)}</li>)
-                  : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
-                  : v}
-                </ul>
-              </div>
-            ))}
-          </div>
+          displayList.map(([k, v]) => (
+            <div className={`entry ${k}`} key={k}>
+              <h2>{k}</h2>
+              <ul>
+                {v instanceof Array ? v.map((x, i) => <li key={`${x}_${i}`}>{makeEmbeddable(x)}</li>)
+                : k === 'lastfm' ? makeEmbeddable(`https://last.fm/user/${v}`)
+                : v}
+              </ul>
+            </div>
+          ))
         )}
     </div>
   )

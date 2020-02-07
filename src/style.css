@@ -40,32 +40,23 @@ body {
   margin: 0;
 }
 
-.displayarea .list img,
-.displayarea .list video {
+.displayarea.list img,
+.displayarea.list video {
   max-width: 50vw;
+  max-height: 50vh;
 }
 
-.displayarea .grid img,
-.displayarea .grid video {
+.displayarea.grid img,
+.displayarea.grid video {
   max-width: 275px;
   max-height: 275px;
 }
 
-.displayarea .entry.homescreens ul,
-.displayarea .entry.selfies ul,
-.displayarea .entry.pets ul,
-.displayarea .entry.handwritings ul,
-.displayarea .entry.stations ul,
-.displayarea .entry.dtops ul {
+.displayarea ul {
   list-style: none;
 }
 
-.displayarea .grid .entry.homescreens ul,
-.displayarea .grid .entry.selfies ul,
-.displayarea .grid .entry.pets ul,
-.displayarea .grid .entry.handwritings ul,
-.displayarea .grid .entry.stations ul,
-.displayarea .grid .entry.dtops ul {
+.displayarea.grid ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
