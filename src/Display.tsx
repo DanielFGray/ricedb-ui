@@ -63,6 +63,14 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
     return list
   }, [selectedCategories, userData, showAll])
 
+  if (!selectedNick) {
+    return (
+      <div className="displayarea">
+        hint: use left/right arrow keys
+      </div>
+    )
+  }
+
   return (
     <div className={`displayarea ${viewMode}`}>
       <div>

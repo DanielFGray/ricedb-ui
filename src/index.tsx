@@ -11,8 +11,8 @@ const Init = () => (
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route exact path="/" component={Main} />
-        <Route exact path="/:nick" component={Main} />
+        <Route path="/:nick" component={Main} />
+        <Route path="/" component={Main} />
       </Switch>
     </Router>
   </Provider>

@@ -61,3 +61,10 @@ body {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.displayarea.grid .entry.dotfiles ul,
+.displayarea.grid .entry.websites ul,
+.displayarea.grid .entry.distros ul {
+  list-style-type: circle;
+  display: block;
+}
