@@ -1,0 +1,76 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 1em;
+  height: 100%;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    "controls content content content";
+}
+
+.controls {
+  grid-area: controls;
+  position: fixed;
+  width: 25%;
+}
+
+.displayarea {
+  margin: 1em;
+  grid-area: content;
+  text-align: center
+}
+
+.displayarea ul {
+  padding: 0;
+  margin: 0.5em;
+}
+
+.displayarea li {
+  padding: 0.25em;
+  margin: 0;
+}
+
+.displayarea .list img,
+.displayarea .list video {
+  max-width: 50vw;
+}
+
+.displayarea .grid img,
+.displayarea .grid video {
+  max-width: 275px;
+  max-height: 275px;
+}
+
+.displayarea .entry.homescreens ul,
+.displayarea .entry.selfies ul,
+.displayarea .entry.pets ul,
+.displayarea .entry.handwritings ul,
+.displayarea .entry.stations ul,
+.displayarea .entry.dtops ul {
+  list-style: none;
+}
+
+.displayarea .grid .entry.homescreens ul,
+.displayarea .grid .entry.selfies ul,
+.displayarea .grid .entry.pets ul,
+.displayarea .grid .entry.handwritings ul,
+.displayarea .grid .entry.stations ul,
+.displayarea .grid .entry.dtops ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center
+}
+
+.displayarea .grid .entry.homescreens ul a:link, .displayarea .grid .entry.selfies ul a:link, .displayarea .grid .entry.pets ul a:link, .displayarea .grid .entry.handwritings ul a:link, .displayarea .grid .entry.stations ul a:link, .displayarea .grid .entry.dtops ul a:link {
+  font-size: 20pt;
+}

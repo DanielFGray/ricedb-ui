@@ -1,6 +1,6 @@
 // / <reference types="react-scripts" />
 
-export interface RiceDbEntry {
+export interface User {
   nick: string;
   deadsince?: number;
   distros?: string[];
@@ -13,5 +13,3 @@ export interface RiceDbEntry {
   selfies?: string[];
   stations?: string[];
 }
-
-export type RiceDb = RiceDbEntry[]

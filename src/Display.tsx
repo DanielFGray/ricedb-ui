@@ -2,11 +2,15 @@ import React, { useMemo } from 'react'
 import { Loader } from 'semantic-ui-react'
 import ago from 's-ago'
 import { useSelector, useDispatch } from 'react-redux'
-import { controls, RootState } from './store'
+import { userSelectors } from './fetchUsers'
+import { RootState } from './store'
 import { Linkify } from './utils'
-import { RiceDbEntry } from './react-app-env'
+import { User } from './react-app-env'
 import Stringify from './Stringify'
 import GitHub from './github'
+import slice from './Controls/slice'
+
+const { actions } = slice
 
 function makeEmbeddable(x: string): JSX.Element | JSX.Element[] {
   if (/^https?:\/\/.*\.(png|jpe?g|gif)$/i.test(x)) {
@@ -57,14 +61,14 @@ function niceDate(label: string, timestamp?: number) {
 
 
 export default function Display({ selectedNick }: { selectedNick: string }) {
-  const { data, loading } = useSelector((state: RootState) => state.ricedb)
+  const { loading } = useSelector((state: RootState) => state.users)
+  const data = useSelector(userSelectors.selectById.bind(selectedNick))
   const {
     viewMode,
     showAll,
     selectedCategories,
   } = useSelector((state: RootState) => state.controls)
   const { deadsince, last_seen: lastSeen, nick: _n, ...userData } = data
-    ?.find((x: RiceDbEntry) => selectedNick === x.nick) || {}
   const dispatch = useDispatch()
 
   const displayList = useMemo(() => {
@@ -96,7 +100,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
                 type="radio"
                 checked={viewMode === 'grid'}
                 id="gridviewcontrol"
-                onChange={() => dispatch(controls.actions.viewModeChanged('grid'))}
+                onChange={() => dispatch(actions.viewModeChanged('grid'))}
               />
               {' '}
               <label htmlFor="gridviewcontrol">grid view</label>
@@ -105,7 +109,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
                 type="radio"
                 checked={viewMode === 'list'}
                 id="listviewcontrol"
-                onChange={() => dispatch(controls.actions.viewModeChanged('list'))}
+                onChange={() => dispatch(actions.viewModeChanged('list'))}
               />
               {' '}
               <label htmlFor="listviewcontrol">list view</label>
@@ -116,7 +120,7 @@ export default function Display({ selectedNick }: { selectedNick: string }) {
                     type="checkbox"
                     checked={showAll}
                     id="showallviewcontrol"
-                    onChange={() => dispatch(controls.actions.showAllChanged())}
+                    onChange={() => dispatch(actions.showAllChanged())}
                   />
                   {' '}
                   <label htmlFor="showallviewcontrol">show all categories</label>

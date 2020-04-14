@@ -4,14 +4,16 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Dropdown, Input, Menu } from 'semantic-ui-react'
 import { FixedSizeList as List } from 'react-window'
 import { has } from 'ramda'
+import { RootState } from '../store'
 import {
-  userListSelector,
-  controls,
-  RootState,
+  userSelectors,
   categoriesSelector,
-  fetchData,
-} from './store'
-import { Contains } from './utils'
+} from '../fetchUsers'
+import { Contains } from '../utils'
+import slice from './slice'
+import { User } from '../react-app-env'
+
+const { actions } = slice
 
 export default function Controls({
   selectedNick,
@@ -20,43 +22,36 @@ export default function Controls({
   selectedNick: string;
   changeUser: (user: string) => void;
 }) {
-  const { data, loading } = useSelector((state: RootState) => state.ricedb)
+  const { loading } = useSelector((state: RootState) => state.users)
   const {
     selectedCategories,
     searchTarget,
   } = useSelector((state: RootState) => state.controls)
   const [input, inputChanged] = useState('')
   const inputRef = useRef<Input>(null)
-  const userList = useSelector(userListSelector)
+  const userList = useSelector(userSelectors.selectAll)
   const categories = useSelector(categoriesSelector)
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (! data) {
-      dispatch(fetchData())
+  const list = userList.filter(({ nick, ...userData }) => {
+    if (input !== '') {
+      switch (searchTarget) {
+      case 'nick':
+        if (! Contains(input, nick)) return false
+        break
+      case 'distro':
+        if (! (userData.distros && userData.distros.some(d => Contains(input, d)))) return false
+        break
+      }
     }
-  }, [dispatch, data])
-
-  const list = userList
-    .filter(({ nick, ...userData }) => {
-      if (input !== '') {
-        switch (searchTarget) {
-        case 'nick':
-          if (!Contains(input, nick)) return false
-          break
-        case 'distro':
-            if (!(userData.distros && userData.distros.some(d => Contains(input, d)))) return false
-          break
-        }
-      }
-      if (
-        selectedCategories.length > 0
-        && ! selectedCategories.every(c => data && has(c, userData))
-      ) {
-        return false
-      }
-      return true
-    })
+    if (
+      selectedCategories.length > 0
+      && ! selectedCategories.every(c => has(c, userData))
+    ) {
+      return false
+    }
+    return true
+  })
 
   useEffect(() => {
     if (list.length === 1 && selectedNick !== list[0].nick) {
@@ -122,7 +117,7 @@ export default function Controls({
           type="radio"
           checked={searchTarget === 'nick'}
           id="nicksearchcontrol"
-          onChange={() => dispatch(controls.actions.searchTargetChanged('nick'))}
+          onChange={() => dispatch(actions.searchTargetChanged('nick'))}
         />
         {' '}
         <label htmlFor="nicksearchcontrol">nick</label>
@@ -131,7 +126,7 @@ export default function Controls({
           type="radio"
           checked={searchTarget === 'distro'}
           id="distrosearchcontrol"
-          onChange={() => dispatch(controls.actions.searchTargetChanged('distro'))}
+          onChange={() => dispatch(actions.searchTargetChanged('distro'))}
         />
         {' '}
         <label htmlFor="distrosearchcontrol">distros</label>
@@ -148,9 +143,9 @@ export default function Controls({
         value={selectedCategories}
         onChange={(_, { value }) => {
           if (value == null) {
-            dispatch(controls.actions.categoriesChanged([]))
+            dispatch(actions.categoriesChanged([]))
           } else {
-            dispatch(controls.actions.categoriesChanged(value as string[]))
+            dispatch(actions.categoriesChanged(value as string[]))
           }
         }}
       />
@@ -162,7 +157,7 @@ export default function Controls({
           height={window.screen.availHeight - 210}
         >
           {({ style, index }) => {
-            if (! data) return null
+            if (! userList) return null
             const userData = list[index]
             return (
               <Menu.Item

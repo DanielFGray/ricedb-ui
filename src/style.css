@@ -2,7 +2,9 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -14,8 +16,7 @@ body {
 .wrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-areas:
-    "controls content content content";
+  grid-template-areas: 'controls content content content';
 }
 
 .controls {
@@ -93,5 +94,5 @@ body {
 }
 
 .commit .branch {
-  font-weight:bold;
+  font-weight: bold;
 }
